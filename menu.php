@@ -89,7 +89,8 @@ mysqli_free_result($result);
           <td><?php echo $menuItem['MenuItemPrice']; ?></td>
           <td>
             <?php
-            $sql = "SELECT Ingredients.IngredientName, MenuItemIngredients.Quantity FROM MenuItemIngredients INNER JOIN Ingredients ON MenuItemIngredients.IngredientID = Ingredients.IngredientID WHERE MenuItemIngredients.MenuItemID = " . $menuItem['MenuItemID'];
+           $sql = "SELECT Ingredients.IngredientName, MenuItemIngredients.Quantity FROM MenuItemIngredients INNER JOIN Ingredients ON MenuItemIngredients.IngredientID = Ingredients.IngredientID WHERE MenuItemIngredients.MenuItemID = " . $menuItem['MenuItemID'];
+
           $result = mysqli_query($conn, $sql);
           $ingredients = mysqli_fetch_all($result, MYSQLI_ASSOC);
           mysqli_free_result($result);

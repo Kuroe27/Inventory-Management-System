@@ -20,14 +20,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Delete the ingredient from the database
     $sql = "DELETE FROM Ingredients WHERE IngredientID = '$ingredientID'";
-    if (mysqli_query($conn, $sql)) {
-        // Redirect the user to a different page to avoid duplicate delete
-        header("Location: ingredients.php?deleted=1");
+    try {
+        if (mysqli_query($conn, $sql)) {
+            // Redirect the user to a different page to avoid duplicate delete
+            header("Location: ingredients.php");
+            exit();
+        }
+    } catch (mysqli_sql_exception $e) {
+        // Display an error message to the user using JavaScript alert
+        echo '<script>alert("Before deleting the ingredients, please ensure that you delete the corresponding menu item first.");</script>';
+        // Use JavaScript to navigate back to the previous page
+        echo '<script>history.go(-1);</script>';
         exit();
-    } else {
-        echo "Error: " . mysqli_error($conn);
     }
+
 }
+
 
 // Close the database connection
 mysqli_close($conn);
