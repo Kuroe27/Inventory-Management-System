@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.cancelbtn,
+.savebtn {
+  display: none;
+}
+
+.id {
+  pointer-events: none;
+}
+
+table input,
+table select {
+  border: none;
+  background: none;
+  color: black;
+}
+
+button {
+  cursor: pointer;
+}
+
+table input {
+  text-align: center;
+}
