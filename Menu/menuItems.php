@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   $stmt->bind_param("sd", $menuItemName, $menuItemPrice);
   $stmt->execute();
 
-  $menuItemID = $stmt->insert_id;
+  $menuItemID = $stmt
+  ->insert_id;
 
   // Prepare statement for inserting menu item ingredients
   $stmt = $conn->prepare("INSERT INTO MenuItemIngredients (MenuItemID, IngredientID, Quantity) VALUES (?, ?, ?)");
@@ -40,10 +41,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
 if (isset($_POST["delete"])) {
     $MenuItemID = $_POST["MenuItemID"];
     // Prepare statement for deleting menu item
-    $stmt = $conn->prepare("DELETE FROM menuItems WHERE MenuItemID=?");
+    $stmt = $conn->prepare("DELETE FROM MenuItems WHERE MenuItemID=?");
+
     $stmt->bind_param("d", $MenuItemID);
     $stmt->execute();
 }
+if (isset($_POST["save"])) {
+  $MeasurementID = $_POST["MeasurementID"];
+  $MeasurementName = htmlspecialchars($_POST["MeasurementName"]);
+  // update the measurement name in the database
+  $stmt = $conn->prepare("UPDATE measurements SET MeasurementName=? WHERE MeasurementID=?");
+  $stmt->bind_param("sd", $MeasurementName, $MeasurementID);
+  $stmt->execute();
+}
+
+
 
 // Prepare statement for selecting all menu items
 $result = $conn->query("SELECT * FROM MenuItems");
@@ -96,8 +108,8 @@ $result = $conn->query("SELECT * FROM MenuItems");
       $menuItems = $conn->query("SELECT * FROM menuitems");
       while ($menuItem = $menuItems->fetch_assoc()) {
         echo "<tr>";
-        echo "<td>" . $menuItem['MenuItemName'] . "</td>";
-        echo "<td>" . $menuItem['MenuItemName'] . "</td>";
+        echo '<td><input type="text" name="MenuItemName" value="' . $menuItem['MenuItemName'] . '"></td>';
+        echo '<td><input type="text" name="menuItemPrice" value="' . $menuItem['MenuItemPrice'] . '"></td>';
         echo "<td>";
         // Retrieve and display ingredients and quantities for current menu item
         $sql = "SELECT Ingredients.IngredientName, MenuItemIngredients.Quantity FROM MenuItemIngredients INNER JOIN Ingredients ON MenuItemIngredients.IngredientID = Ingredients.IngredientID WHERE MenuItemIngredients.MenuItemID = " . $menuItem['MenuItemID'];
@@ -107,6 +119,16 @@ $result = $conn->query("SELECT * FROM MenuItems");
         foreach ($ingredients as $ingredient) {
           echo $ingredient['IngredientName'] . " (" . $ingredient['Quantity'] . "), ";
         }
+        echo '<td><form method="post">
+        <input type="hidden" name="MenuItemID" value="' . $menuItem['MenuItemID'] . '">
+        <button MeasurementID="editbtn'.$menuItem['MenuItemID'].'" type="button" name="editbtn'.$menuItem['MenuItemID'].'" id="editbtn'.$menuItem['MenuItemID'].'" onclick="enableInputFields('.intval($menuItem['MenuItemID']).')">Edit</button>
+        <button class="cancelbtn" id="cancel'.$menuItem['MenuItemID'].'" onclick="myFunction('.intval($menuItem['MenuItemID']).')">Cancel</button>
+        <button class="savebtn" name="save" id="save'.$menuItem['MenuItemID'].'" onclick="myFunction('.intval($menuItem['MenuItemID']).')">Save</button>
+        <button type="submit" name="delete">Delete</button>
+        
+        </form></td>';
+  
+   
         echo "</td>";
         echo "</tr>";
       }
@@ -114,5 +136,6 @@ $result = $conn->query("SELECT * FROM MenuItems");
   </tbody>
 </table>
   <a href="ingredients.php">Back to ingredient</a>
+  <script src="../script.js"></script>
 </body>
 </html>
