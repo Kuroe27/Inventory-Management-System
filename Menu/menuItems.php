@@ -6,12 +6,6 @@ $dbname = "lomi_db";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   $menuItemName = htmlspecialchars($_POST['menuItemName']);
   $menuItemPrice = htmlspecialchars($_POST['menuItemPrice']);
@@ -35,41 +29,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   }
 
   header("Location: menuItems.php");
-  exit();
 }
-
 if (isset($_POST["delete"])) {
-    $MenuItemID = $_POST["MenuItemID"];
-    // Prepare statement for deleting menu item
-    $stmt = $conn->prepare("DELETE FROM MenuItems WHERE MenuItemID=?");
-
-    $stmt->bind_param("d", $MenuItemID);
-    $stmt->execute();
+  $MenuItemID = $_POST["MenuItemID"];
+  $conn->query("DELETE FROM menuitems WHERE MenuItemID='$MenuItemID'");
 }
+
 if (isset($_POST["save"])) {
-  $MeasurementID = $_POST["MeasurementID"];
-  $MeasurementName = htmlspecialchars($_POST["MeasurementName"]);
-  // update the measurement name in the database
-  $stmt = $conn->prepare("UPDATE measurements SET MeasurementName=? WHERE MeasurementID=?");
-  $stmt->bind_param("sd", $MeasurementName, $MeasurementID);
-  $stmt->execute();
+  $MenuItemID = $_POST["MenuItemID"];
+  $MenuItemName = $_POST["MenuItemName"];
+  $MenuItemPrice = $_POST["MenuItemPrice"];
+  // Disable foreign key check
+  $conn->query("SET FOREIGN_KEY_CHECKS=0");
+  
+  // Update the menu item name in the database
+  $conn->query("UPDATE menuitems SET MenuItemName='$MenuItemName', MenuItemPrice='$MenuItemPrice' WHERE MenuItemID=$MenuItemID");
+  
+  // Re-enable foreign key check
+  $conn->query("SET FOREIGN_KEY_CHECKS=1");
 }
 
+// Select all menu items
+$result = $conn->query("
+SELECT 
+  m.MenuItemID, 
+  m.MenuItemName, 
+  m.MenuItemPrice, 
+  GROUP_CONCAT(CONCAT(mi.Quantity, ' ', i.IngredientName) SEPARATOR ', ') AS Ingredients 
+FROM 
+  menuitems m 
+  JOIN MenuItemIngredients mi ON m.MenuItemID = mi.MenuItemID 
+  JOIN ingredients i ON mi.IngredientID = i.IngredientID 
+GROUP BY 
+  m.MenuItemID, 
+  m.MenuItemName, 
+  m.MenuItemPrice
 
+");
 
-// Prepare statement for selecting all menu items
-$result = $conn->query("SELECT * FROM MenuItems");
-
-// Close the database connection
 ?>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Add Menu Item</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Measurement</title>
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
-  <h1>Add Menu Item</h1>
+<h1>Add Menu Item</h1>
   <form method="post">
     <label for="menuItemName">Menu Item Name:</label>
     <input type="text" name="menuItemName" required>
@@ -93,49 +103,74 @@ $result = $conn->query("SELECT * FROM MenuItems");
 
     <input type="submit" value="Add Menu Item">
   </form>
-  <br>
-  <h2>Menu Items</h2>
+
   <table>
-  <thead>
     <tr>
+      <th>Menu Item ID</th>
       <th>Menu Item Name</th>
-      <th>Ingredients</th>
+      <th>Action</th>
     </tr>
-  </thead>
-  <tbody>
-    <?php
-      // Loop through menu items
-      $menuItems = $conn->query("SELECT * FROM menuitems");
-      while ($menuItem = $menuItems->fetch_assoc()) {
-        echo "<tr>";
-        echo '<td><input type="text" name="MenuItemName" value="' . $menuItem['MenuItemName'] . '"></td>';
-        echo '<td><input type="text" name="menuItemPrice" value="' . $menuItem['MenuItemPrice'] . '"></td>';
-        echo "<td>";
-        // Retrieve and display ingredients and quantities for current menu item
-        $sql = "SELECT Ingredients.IngredientName, MenuItemIngredients.Quantity FROM MenuItemIngredients INNER JOIN Ingredients ON MenuItemIngredients.IngredientID = Ingredients.IngredientID WHERE MenuItemIngredients.MenuItemID = " . $menuItem['MenuItemID'];
-        $result = mysqli_query($conn, $sql);
-        $ingredients = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        mysqli_free_result($result);
-        foreach ($ingredients as $ingredient) {
-          echo $ingredient['IngredientName'] . " (" . $ingredient['Quantity'] . "), ";
-        }
-        echo '<td><form method="post">
-        <input type="hidden" name="MenuItemID" value="' . $menuItem['MenuItemID'] . '">
-        <button MeasurementID="editbtn'.$menuItem['MenuItemID'].'" type="button" name="editbtn'.$menuItem['MenuItemID'].'" id="editbtn'.$menuItem['MenuItemID'].'" onclick="enableInputFields('.intval($menuItem['MenuItemID']).')">Edit</button>
-        <button class="cancelbtn" id="cancel'.$menuItem['MenuItemID'].'" onclick="myFunction('.intval($menuItem['MenuItemID']).')">Cancel</button>
-        <button class="savebtn" name="save" id="save'.$menuItem['MenuItemID'].'" onclick="myFunction('.intval($menuItem['MenuItemID']).')">Save</button>
-        <button type="submit" name="delete">Delete</button>
-        
-        </form></td>';
+    <?php while ($row = $result->fetch_assoc()) : ?>
+      <tr>
+        <td>
+        <form method='POST'>
+                      
+                      <input type='text' 
+                      name='MenuItemID' 
+                      class='id'
+                      value='<?php echo $row["MenuItemID"]; ?>'>
+
+                      <input  id='name<?php echo $row["MenuItemID"]; ?>' 
+                      REQUIRED
+                      class='all<?php echo $row["MenuItemID"]; ?>' 
+                      MenuItemID='MenuItemName<?php echo $row["MenuItemID"]; ?>' 
+                      type='text' name='MenuItemName' 
+                      value='<?php echo $row["MenuItemName"]; ?> ' >
+                
+                      <input id='name<?php echo $row["MenuItemID"]; ?>' 
+                      REQUIRED
+                      IngredientID='IngredientName_<?php echo $row["MenuItemID"]; ?>' 
+                      type='number' name='MenuItemPrice' 
+                      class='all<?php echo $row["MenuItemID"]; ?>'
+                      value='<?php echo preg_replace("/[^0-9.]/", "", $row["MenuItemPrice"]); ?>' 
+
+
+                      step='any' disabled>
+                   
+                      
+                      <input type="text" name="ingredients" value="<?php echo $row['Ingredients']; ?>">
+        </td>
+        <td>
   
-   
-        echo "</td>";
-        echo "</tr>";
-      }
-    ?>
-  </tbody>
-</table>
-  <a href="ingredients.php">Back to ingredient</a>
-  <script src="../script.js"></script>
+           
+
+              
+
+              <button MenuItemID='editbtn<?php echo $row["MenuItemID"]; ?>' 
+              type='button' name='editbtn<?php echo $row["MenuItemID"]; ?>' 
+              id='editbtn<?php echo $row["MenuItemID"]; ?>' 
+              onclick='enableInputFields(<?php echo intval($row["MenuItemID"]); ?>)'>Edit</button>
+
+
+              <button
+              class='cancelbtn'
+               id="cancel<?php echo $row["MenuItemID"]; ?>"
+               onclick='myFunction(<?php echo intval($row["MenuItemID"]); ?>)'>Cancel
+              </button>
+              
+              <button
+              class='savebtn'
+              name='save'
+               id="save<?php echo $row["MenuItemID"]; ?>"
+               onclick='myFunction(<?php echo intval($row["MenuItemID"]); ?>)'>Save
+              </button>
+
+              <button type='submit' name='delete'   >Delete</button>
+              </form>
+          </td>
+            </tr>
+        <?php endwhile; ?>
+    </table>
+    <script src="../script.js"></script>
 </body>
 </html>
