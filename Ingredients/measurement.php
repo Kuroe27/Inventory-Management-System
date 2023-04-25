@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "lomi_db";
+$dbname = "lomitrack";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 

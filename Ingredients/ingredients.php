@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "lomi_db";
+$dbname = "lomitrack";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -26,7 +26,7 @@ if (isset($_POST["delete"])) {
 }
 
 // check if the form has been submitted for editing an measurement
-if (isset($_POST["save"])) {
+    if (isset($_POST["save"])) {
     $IngredientID = $_POST["IngredientID"];
     $IngredientName = $_POST["IngredientName"];
     $Quantity = $_POST["Quantity"];
@@ -47,7 +47,8 @@ $result = $conn->query("SELECT * FROM ingredients");
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="wInIngredientIDth=device-wInIngredientIDth, initial-scale=1.0">
   <title>Measurement</title>
-  <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style.css">
+
 </head>
 <body>
 

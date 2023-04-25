@@ -2,22 +2,26 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "lomi_db";
+$dbname = "lomitrack";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   $menuItemName = htmlspecialchars($_POST['menuItemName']);
   $menuItemPrice = htmlspecialchars($_POST['menuItemPrice']);
+  $menuItemFile = $_FILES['menuItemFile']['name'];
   $ingredientIDs = $_POST['ingredientIDs'];
 
-  // Prepare statement for inserting menu item
-  $stmt = $conn->prepare("INSERT INTO MenuItems (MenuItemName, MenuItemPrice) VALUES (?, ?)");
-  $stmt->bind_param("sd", $menuItemName, $menuItemPrice);
+  // Upload image file to the server
+  $target_dir = "uploads/";
+  $target_file = $target_dir . basename($_FILES["menuItemFile"]["name"]);
+  move_uploaded_file($_FILES["menuItemFile"]["tmp_name"], $target_file);
+
+  $stmt = $conn->prepare("INSERT INTO MenuItems (MenuItemName, MenuItemPrice, MenuItemImage) VALUES (?, ?, ?)");
+  $stmt->bind_param("sds", $menuItemName, $menuItemPrice, $target_file);
   $stmt->execute();
 
-  $menuItemID = $stmt
-  ->insert_id;
+  $menuItemID = $stmt->insert_id;
 
   // Prepare statement for inserting menu item ingredients
   $stmt = $conn->prepare("INSERT INTO MenuItemIngredients (MenuItemID, IngredientID, Quantity) VALUES (?, ?, ?)");
@@ -55,6 +59,7 @@ SELECT
   m.MenuItemID, 
   m.MenuItemName, 
   m.MenuItemPrice, 
+  m.MenuItemImage,
   GROUP_CONCAT(CONCAT(mi.Quantity, ' ', i.IngredientName) SEPARATOR ', ') AS Ingredients 
 FROM 
   menuitems m 
@@ -63,8 +68,8 @@ FROM
 GROUP BY 
   m.MenuItemID, 
   m.MenuItemName, 
-  m.MenuItemPrice
-
+  m.MenuItemPrice, 
+  m.MenuItemImage
 ");
 
 ?>
@@ -75,18 +80,23 @@ GROUP BY
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Measurement</title>
-  <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../style.css">
+
+
 </head>
 <body>
 
-<h1>Add Menu Item</h1>
-  <form method="post">
+ <h1>Add Menu Item</h1>
+  <form method="post" enctype="multipart/form-data">
     <label for="menuItemName">Menu Item Name:</label>
     <input type="text" name="menuItemName" required>
     <br>
     <label for="menuItemPrice">Menu Item Price:</label>
     <input type="number" name="menuItemPrice" step="0.01" min="0" required>
+  
     <br>
+    <label for="menuItemFile">Menu Item Image (JPEG, JPG, PNG only):</label>
+<input type="file" name="menuItemFile" accept=".jpg,.jpeg,.png" required>
     <p>Ingredients:</p>
 
     <?php
@@ -106,10 +116,12 @@ GROUP BY
 
   <table>
     <tr>
+      <div class=" text-yellow-200">asd</div>
       <th>Menu Item ID</th>
       <th>Menu Item Name</th>
       <th>Action</th>
     </tr>
+    
     <?php while ($row = $result->fetch_assoc()) : ?>
       <tr>
         <td>
@@ -117,7 +129,7 @@ GROUP BY
                       
                       <input type='text' 
                       name='MenuItemID' 
-                      class='id'
+                      class='id text-xl'
                       value='<?php echo $row["MenuItemID"]; ?>'>
 
                       <input  id='name<?php echo $row["MenuItemID"]; ?>' 
@@ -133,19 +145,11 @@ GROUP BY
                       type='number' name='MenuItemPrice' 
                       class='all<?php echo $row["MenuItemID"]; ?>'
                       value='<?php echo preg_replace("/[^0-9.]/", "", $row["MenuItemPrice"]); ?>' 
-
-
                       step='any' disabled>
-                   
-                      
                       <input type="text" name="ingredients" value="<?php echo $row['Ingredients']; ?>">
         </td>
+               <td><img src="<?php echo $row["MenuItemImage"]; ?>" width="100" height="100"></td>
         <td>
-  
-           
-
-              
-
               <button MenuItemID='editbtn<?php echo $row["MenuItemID"]; ?>' 
               type='button' name='editbtn<?php echo $row["MenuItemID"]; ?>' 
               id='editbtn<?php echo $row["MenuItemID"]; ?>' 
