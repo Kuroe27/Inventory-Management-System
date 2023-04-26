@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "lomitrack";
+$dbname = "bundatandb";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -11,20 +11,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   $menuItemPrice = htmlspecialchars($_POST['menuItemPrice']);
   $menuItemFile = $_FILES['menuItemFile']['name'];
   $ingredientIDs = $_POST['ingredientIDs'];
+  $categoryID = $_POST['categoryID'];
 
   // Upload image file to the server
-  $target_dir = "uploads/";
+  $target_dir = "../images/";
   $target_file = $target_dir . basename($_FILES["menuItemFile"]["name"]);
   move_uploaded_file($_FILES["menuItemFile"]["tmp_name"], $target_file);
 
-  $stmt = $conn->prepare("INSERT INTO MenuItems (MenuItemName, MenuItemPrice, MenuItemImage) VALUES (?, ?, ?)");
-  $stmt->bind_param("sds", $menuItemName, $menuItemPrice, $target_file);
+  $stmt = $conn->prepare("INSERT INTO menuitems (MenuItemName, MenuItemPrice, MenuItemImage, CategoryID) VALUES (?, ?, ?, ?)");
+  $stmt->bind_param("sdsi", $menuItemName, $menuItemPrice, $target_file, $categoryID);
   $stmt->execute();
 
   $menuItemID = $stmt->insert_id;
 
   // Prepare statement for inserting menu item ingredients
-  $stmt = $conn->prepare("INSERT INTO MenuItemIngredients (MenuItemID, IngredientID, Quantity) VALUES (?, ?, ?)");
+  $stmt = $conn->prepare("INSERT INTO menuitemingredients (MenuItemID, IngredientID, Quantity) VALUES (?, ?, ?)");
   $stmt->bind_param("ddd", $menuItemID, $ingredientID, $quantity);
 
   foreach ($ingredientIDs as $ingredientID) {
@@ -38,21 +39,19 @@ if (isset($_POST["delete"])) {
   $MenuItemID = $_POST["MenuItemID"];
   $conn->query("DELETE FROM menuitems WHERE MenuItemID='$MenuItemID'");
 }
-
 if (isset($_POST["save"])) {
   $MenuItemID = $_POST["MenuItemID"];
   $MenuItemName = $_POST["MenuItemName"];
-  $MenuItemPrice = $_POST["MenuItemPrice"];
+  
   // Disable foreign key check
   $conn->query("SET FOREIGN_KEY_CHECKS=0");
   
   // Update the menu item name in the database
-  $conn->query("UPDATE menuitems SET MenuItemName='$MenuItemName', MenuItemPrice='$MenuItemPrice' WHERE MenuItemID=$MenuItemID");
+  $conn->query("UPDATE menuitems SET MenuItemName='$MenuItemName' WHERE MenuItemID=$MenuItemID");
   
   // Re-enable foreign key check
   $conn->query("SET FOREIGN_KEY_CHECKS=1");
 }
-
 // Select all menu items
 $result = $conn->query("
 SELECT 
@@ -60,45 +59,56 @@ SELECT
   m.MenuItemName, 
   m.MenuItemPrice, 
   m.MenuItemImage,
+  c.CategoryName,
   GROUP_CONCAT(CONCAT(mi.Quantity, ' ', i.IngredientName) SEPARATOR ', ') AS Ingredients 
 FROM 
   menuitems m 
-  JOIN MenuItemIngredients mi ON m.MenuItemID = mi.MenuItemID 
+  JOIN menuitemingredients mi ON m.MenuItemID = mi.MenuItemID 
   JOIN ingredients i ON mi.IngredientID = i.IngredientID 
+  JOIN categories c ON m.CategoryID = c.CategoryID
 GROUP BY 
   m.MenuItemID, 
   m.MenuItemName, 
   m.MenuItemPrice, 
-  m.MenuItemImage
+  m.MenuItemImage,
+  c.CategoryName
 ");
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Measurement</title>
-<link rel="stylesheet" href="../style.css">
-
-
+  <title>Add Menu Item</title>
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
- <h1>Add Menu Item</h1>
+  <h1>Add Menu Item</h1>
   <form method="post" enctype="multipart/form-data">
     <label for="menuItemName">Menu Item Name:</label>
     <input type="text" name="menuItemName" required>
     <br>
     <label for="menuItemPrice">Menu Item Price:</label>
     <input type="number" name="menuItemPrice" step="0.01" min="0" required>
-  
     <br>
     <label for="menuItemFile">Menu Item Image (JPEG, JPG, PNG only):</label>
-<input type="file" name="menuItemFile" accept=".jpg,.jpeg,.png" required>
+    <input type="file" name="menuItemFile" accept=".jpg,.jpeg,.png" required>
+    <br>
+    <label for="categoryID">Category:</label>
+    <select name="categoryID" required>
+      <?php
+        $categories = $conn->query("SELECT * FROM categories");
+        while ($category = $categories->fetch_assoc()) {
+          echo "<option value='" . $category['CategoryID'] . "'>" . $category['CategoryName'] . "</option>";
+        }
+      ?>
+    </select>
+    <br>
     <p>Ingredients:</p>
-
     <?php
       $ingredients = $conn->query("SELECT * FROM ingredients");
       while ($ingredient = $ingredients->fetch_assoc()) {
@@ -110,7 +120,6 @@ GROUP BY
         echo "<br>";
       }
     ?>
-
     <input type="submit" value="Add Menu Item">
   </form>
 
