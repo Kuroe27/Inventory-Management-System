@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../s.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="container">
+
+            <div class="navTitle">
+                <img src="../icons/logo.png" alt="logo" class="logo">
+                <h1 class="title">Bundatan</h1>
+                <div id="boxTitle"></div>
+            </div>
+            <div class="navLinks">
+                <a href="dashboard.php" class="link active-link" id="dashboard"><span>Dashboard</span> <img
+                        src="../icons/dashboardIcon.png" alt="dashboardIcon" class="icons"></a>
+                <a href="measurement.php" class="link inactive-link" id="manage-link">
+                    <span>Manage</span>
+                    <img src="../icons/manageIcon.png" alt="dashboardIcon" class="icons">
+                </a>
+
+                <a href="measurement.php" class=" inactive-link
+                    additional-link"><span>Measurement</span><img src="../icons/measuring-cup.png" class="icons"></a>
+                <a href="ingredients.php" class="inactive-link additional-link"
+                    id="manage-link"><span>Ingredients</span><img src="../icons/ingredient.png" class="icons"></a>
+                <a href="#" class="inactive-link additional-link"><span>Menu</span><img src="../icons/restaurant.png"
+                        class="icons"></a>
+                <a href="#" class="inactive-link additional-link"><span>Sales</span><img src="../icons/sales.png"
+                        class="icons"></a>
+
+
+                <a href="dashboard.php" class="link inactive-link"><span>Report</span><img src="../icons/report.png"
+                        alt="dashboardIcon" class="icons"></a>
+                <a href="dashboard.php" class="link inactive-link"><span>Logout</span><img src="../icons/logoutIcon.png"
+                        alt="dashboardIcon" class="icons"></a>
+            </div>
+        </div>
+        <a href="/Ingredients/measurement.php">aasasasassd</a>
+
+    </nav>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('.navLinks a');
+            const additionalLinks = document.querySelectorAll('.additional-link');
+            const manageLink = document.querySelector('#manage-link');
+            const dashboard = document.getElementById('#dashboard');
+            links.forEach(link => {
+                // check if the current URL matches the link's href attribute
+                if (window.location.href.includes(link.getAttribute('href'))) {
+                    link.classList.add('active-link');
+                }
+
+                link.addEventListener('click', (event) => {
+                    // remove active class from all links except the clicked one
+                    links.forEach(otherLink => {
+                        if (otherLink !== link) {
+                            otherLink.classList.remove('active-link');
+                            otherLink.classList.add('inactive-link');
+                        }
+                    });
+
+                    // add active class to clicked link
+                    link.classList.add('active-link');
+                    link.classList.remove('inactive-link');
+
+                    // show/hide additional links based on Manage link and additional link clicks
+                    if (link.id === 'manage-link' || link.classList.contains('additional-link')) {
+                        additionalLinks.forEach(additionalLink => {
+                            additionalLink.style.display = 'flex';
+                        });
+                    } else {
+                        additionalLinks.forEach(additionalLink => {
+                            additionalLink.style.display = 'none';
+                        });
+                    }
+
+                    // add back active class to Manage link if an additional link is clicked
+                    if (link.classList.contains('additional-link')) {
+
+                        manageLink.classList.add('active-link');
+
+                    }
+
+
+
+                });
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>

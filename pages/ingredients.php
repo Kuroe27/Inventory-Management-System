@@ -1,3 +1,5 @@
+
+<?php include 'sidebar.html'; ?>
 <?php
 
 $servername = "localhost";
