@@ -12,19 +12,3 @@
 .id {
   pointer-events: none;
 }
-
-table input,
-table select {
-  border: none;
-  background: none;
-  color: black;
-}
-
-button {
-  cursor: pointer;
-}
-
-table input {
-  text-align: center;
-  border: none;
-}

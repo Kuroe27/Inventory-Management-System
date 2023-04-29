@@ -36,3 +36,12 @@ navLinks.forEach(link => {
         this.classList.add('active');
     });
 });
+function showForm() {
+    var form = document.getElementById("insert-form");
+    form.style.display = "block";
+}
+
+function hideForm() {
+    var form = document.getElementById("insert-form");
+    form.style.display = "none";
+}

@@ -38,30 +38,52 @@ $result = $conn->query("SELECT * FROM measurements");
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="wMeasurementIDth=device-wMeasurementIDth, initial-scale=1.0">
-  <title>Measurement</title>
-  <link rel="stylesheet" href="../style.css">
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../s.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="insertion">
+        <div class="container">
 
-<form method="POST">
-  <label for="MeasurementName">MeasurementName:</label>
+        <div class="Tableheader">
+            <h1>Measurement</h1>
+            <input type="text" class="search" placeholder="Search..">
+            <button class="create" onclick="showForm()">New</button>
+        </div>
+
+            <div class="form"  id="insert-form">
+                <div class="formHeader">    
+                <h2 class="formTitle">Insert New Title</h2>
+                <img src="../icons/cross.png"  class="close" onclick="hideForm()">
+             
+                </div>
+            <form method="POST">
+  <label for="MeasurementName">Measurement Name:</label>
   <input type="text"
    name="MeasurementName" required>
-  <br>
-  <button type="submit" name="insert">Insert</button>
+  <button type="submit" name="insert" class="insert">Insert</button>
 </form>
 
+            </div>
+
 <table>
-        <tr>
-            <th>MeasurementID</th>
-            <th>MeasurementName</th>
-            <th>Actions</th>
-        </tr>
+<thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
         <?php while ($row = $result->fetch_assoc()) : ?>
             <tr>
+            <td><?php echo $row["MeasurementID"]; ?></td>
                 <td>
                     <form method='POST'>
                         <input type='text' 
@@ -105,7 +127,12 @@ $result = $conn->query("SELECT * FROM measurements");
                 </td>
             </tr>
         <?php endwhile; ?>
+        </tbody>
     </table>
-<script src="../script.js"></script>
+    </div>
+
+
+</div>
+<script src="script.js"></script>
 </body>
 </html>

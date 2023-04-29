@@ -6,6 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../s.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <title>Document</title>
 </head>
 
@@ -46,53 +50,33 @@
 
     </nav>
     <script>
+        // Get the current URL
+        const currentUrl = window.location.href;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const links = document.querySelectorAll('.navLinks a');
-            const additionalLinks = document.querySelectorAll('.additional-link');
-            const manageLink = document.querySelector('#manage-link');
-            const dashboard = document.getElementById('#dashboard');
-            links.forEach(link => {
-                // check if the current URL matches the link's href attribute
-                if (window.location.href.includes(link.getAttribute('href'))) {
-                    link.classList.add('active-link');
+        // Get all the links
+        const links = document.querySelectorAll('.link, .additional-link');
+
+        // Loop through all the links
+        links.forEach(link => {
+            // Get the link's URL
+            const linkUrl = link.getAttribute('href');
+
+            // Check if the current URL matches with the link's URL
+            if (currentUrl.includes(linkUrl)) {
+                // Add the "active-link" class and remove the "inactive-link" class
+                link.classList.add('active-link');
+                link.classList.remove('inactive-link');
+
+                // Check if the link is an additional link
+                if (link.classList.contains('additional-link')) {
+                    // Add the "active-link" class to the manage link
+                    document.querySelector('#manage-link').classList.add('active-link');
                 }
-
-                link.addEventListener('click', (event) => {
-                    // remove active class from all links except the clicked one
-                    links.forEach(otherLink => {
-                        if (otherLink !== link) {
-                            otherLink.classList.remove('active-link');
-                            otherLink.classList.add('inactive-link');
-                        }
-                    });
-
-                    // add active class to clicked link
-                    link.classList.add('active-link');
-                    link.classList.remove('inactive-link');
-
-                    // show/hide additional links based on Manage link and additional link clicks
-                    if (link.id === 'manage-link' || link.classList.contains('additional-link')) {
-                        additionalLinks.forEach(additionalLink => {
-                            additionalLink.style.display = 'flex';
-                        });
-                    } else {
-                        additionalLinks.forEach(additionalLink => {
-                            additionalLink.style.display = 'none';
-                        });
-                    }
-
-                    // add back active class to Manage link if an additional link is clicked
-                    if (link.classList.contains('additional-link')) {
-
-                        manageLink.classList.add('active-link');
-
-                    }
-
-
-
-                });
-            });
+            } else {
+                // Add the "inactive-link" class and remove the "active-link" class
+                link.classList.add('inactive-link');
+                link.classList.remove('active-link');
+            }
         });
 
 

@@ -109,7 +109,7 @@ button {
 .navLinks .link {
   color: rgba(0, 0, 0, 0.495);
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -137,7 +137,6 @@ button {
 
 .additional-link {
   font-size: 5rem;
-  border-top: 1px solid grey;
   height: 2.7rem;
 
   color: rgba(0, 0, 0, 0.495);
@@ -148,6 +147,11 @@ button {
   justify-content: space-between;
 }
 
+.additional-link img {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+}
 .additional-link span {
   margin-left: 1.5rem;
 }
@@ -364,6 +368,174 @@ button {
   height: 1rem;
   margin-left: 0.5rem;
 }
+/* measurement */
+
+.insertion .container {
+  margin-left: 320px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+}
+
+.Tableheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.search {
+  display: flex;
+  align-items: center;
+  width: 30%;
+  height: 2rem;
+  border-radius: 1rem;
+  background: white;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(181, 177, 177);
+  margin-right: 7rem;
+}
+
+.create {
+  width: 7rem;
+  height: 2rem;
+  border-radius: 1rem;
+  background: rgb(54, 48, 48);
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2rem;
+}
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+.close {
+  cursor: pointer;
+  width: 2rem;
+  margin-right: 1rem;
+}
+.form {
+  padding: 1rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid rgb(224, 219, 219);
+  border-bottom: 1px solid rgb(224, 219, 219);
+}
+
+.form form {
+  margin-top: 1rem;
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  align-items: center;
+}
+
+.form button:hover {
+  background: #000000;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
+}
+
+.form label {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.form input {
+  width: 20rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(181, 177, 177);
+  margin: 0 1rem;
+  font-family: "Open Sans", sans-serif;
+  color: #000000;
+}
+
+.insert {
+  width: 7rem;
+  height: 2.1rem;
+  border-radius: 0.5rem;
+  background: rgb(54, 48, 48);
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form h2 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #000000;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ddd;
+}
+table input {
+  width: 100%;
+  background: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  text-align: center;
+  font-size: 1.3rem;
+  text-transform: capitalize;
+}
+th,
+td {
+  text-align: center;
+  border-top: 1px solid #edecec;
+  padding: 0.4rem;
+}
+
+th {
+  background-color: rgb(30, 28, 28);
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+td:first-child {
+  width: 10%;
+  color: #000000;
+  text-align: center;
+}
+
+td:last-child {
+  text-align: center;
+}
+
+button {
+  background-color: #282525;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 5rem;
+}
+.cancelbtn,
+.savebtn {
+  display: none;
+}
+.id {
+  display: none;
+}
+
 @media only screen and (max-width: 1495px) {
   #salesChart {
     min-height: 300px;
