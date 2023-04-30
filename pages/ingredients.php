@@ -44,28 +44,57 @@ $result = $conn->query("SELECT * FROM ingredients");
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="wInIngredientIDth=device-wInIngredientIDth, initial-scale=1.0">
-  <title>Measurement</title>
-    <link rel="stylesheet" href="../style.css">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
-<form method="POST">
-  <label for="IngredientName">IngredientName:</label>
-  <input type="text"
-   name="IngredientName" required>
-  <br>
+    <div class="Tableheader">
+        <h1>Ingredients</h1>
+        <form method="GET" class="searhForm">
+            <input type="text" name="searchQuery" class="search" placeholder="Search...">
+            <button type="submit" name="search">Search</button>
+        </form>
 
-  <label for="Quantity"  >Quantity:</label>
+        <button class="create" onclick="showForm()">New</button>
+    </div>
+    <div class="insertion">
+        <div class="container">
+
+
+            <div class="form"  id="insert-form">
+                <div class="formHeader">    
+                <h2 class="formTitle">Insert New Ingredient</h2>
+                <img src="../icons/cross.png"  class="close" onclick="hideForm()">
+             
+                </div>
+ 
+
+            <form method="POST" >
+    <div class="secondForm">
+  <div class="inputs">
+  <label for="IngredientName">Ingredient Name:</label>
+  <input type="text"
+   name="MeasurementName" required>
+   </div>
+   <div class="inputs">
+   <label for="Quantity"  >Quantity:</label>
   <input type="number" min="1"
    name="Quantity" required>
-  <br>
-
-  <select name="MeasurementID">
+   </div>
+   <div class="inputs">
+   <label for="Measurement"  >Measurement:</label>
+   <select name="MeasurementID">
     <?php
       $measurements = $conn->query("SELECT * FROM measurements");
 while ($measurement = $measurements->fetch_assoc()) {
@@ -73,96 +102,14 @@ while ($measurement = $measurements->fetch_assoc()) {
 }
 ?>
   </select>
-
- 
-  <br>
-  <button type="submit" name="insert">Insert</button>
+   </div>
+  <button type="submit" name="insert" class="insert">Insert</button>
+  </div>
 </form>
 
-<table>
-        <tr>
-            <th>IngredientID</th>
-            <th>IngredientName</th>
-            <th>Actions</th>
-        </tr>
-        <?php while ($row = $result->fetch_assoc()) : ?>
-            <tr>
-                <td>
-                    
-                    <form method='POST'>
-
-                        <!-- inputs -->
-                        <!-- id -->
-                        <input type='text' 
-                        name='IngredientID' 
-                        class='id'
-                        value='<?php echo $row["IngredientID"]; ?>'>
-
-                        <!-- name -->
-                        <input  id='ingredientsInput<?php echo $row["IngredientID"]; ?>'
-                        class='all<?php echo $row["IngredientID"]; ?>'
-                        REQUIRED
-                        IngredientID='IngredientName_<?php echo $row["IngredientID"]; ?>' 
-                        type='text' name='IngredientName' 
-                        value='<?php echo $row["IngredientName"]; ?> ' disabled>
-                        
-                        <select name="MeasurementID" disabled                class='all<?php echo $row["IngredientID"]; ?>'>
-    <?php
-    $measurements = $conn->query("SELECT * FROM measurements");
-            while ($measurement = $measurements->fetch_assoc()) {
-                $selected = ($measurement["MeasurementID"] == $row["MeasurementID"]) ? "selected" : "";
-                echo "<option value='" . $measurement["MeasurementID"] . "' " . $selected . ">" . $measurement["MeasurementName"] . "</option>";
-            }
-            ?>
-    </select>
-                        <!-- quantity -->
-                        <input id='name<?php echo $row["IngredientID"]; ?>' 
-    REQUIRED
-    IngredientID='IngredientName_<?php echo $row["IngredientID"]; ?>' 
-    type='number' name='Quantity' 
-    class='all<?php echo $row["IngredientID"]; ?>'
-    value='<?php echo preg_replace("/[^0-9.]/", "", $row["Quantity"]); ?>' 
-    step='any' disabled>
-
-
-                        <!-- measurement -->
-                        <input  class='savebtn' value='<?php echo $row["MeasurementID"]; ?> ' >
-
-                     
-
-                        
-                 </td>
-                <td>
-                
-                <!-- buttons -->
-
-                    <button IngredientID='editbtn<?php echo $row["IngredientID"]; ?>' 
-                    type='button' name='editbtn<?php echo $row["IngredientID"]; ?>' 
-                    id='editbtn<?php echo $row["IngredientID"]; ?>' 
-                    onclick='enableInputFields(<?php echo intval($row["IngredientID"]); ?>)'>Edit</button>
-
-
-                    <button
-                    class='cancelbtn'
-                     id="cancel<?php echo $row["IngredientID"]; ?>"
-                     onclick='myFunction(<?php echo intval($row["IngredientID"]); ?>)'>Cancel
-                    </button>
-                    
-                    <button
-                    class='savebtn'
-                    name='save'
-                     id="save<?php echo $row["IngredientID"]; ?>"
-                     onclick='myFunction(<?php echo intval($row["IngredientID"]); ?>)'>Save
-                    </button>
-
-                    <button type='submit' name='delete'    onclick='saveFunction(<?php echo intval($row["IngredientID"]); ?>)'>Delete</button>
-                    </form>
-                </td>
-            </tr>
-        <?php endwhile; ?>
-    </table>
-    <a href="measurement.php">Measurement</a>
-    <a href="../Menu/menuItems.php">s</a>
-    <script src="../script.js"></script>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

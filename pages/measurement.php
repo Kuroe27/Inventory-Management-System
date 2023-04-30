@@ -32,7 +32,12 @@ if (isset($_POST["delete"])) {
 }
 
 
-$result = $conn->query("SELECT * FROM measurements");
+$searchQuery = "";
+if (isset($_GET["search"])) {
+    $searchQuery = $_GET["searchQuery"];
+}
+
+$result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%$searchQuery%'");
 
 ?>
 <!DOCTYPE html>
@@ -42,20 +47,29 @@ $result = $conn->query("SELECT * FROM measurements");
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../s.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    
+<div class="Tableheader">
+            <h1>Measurement</h1>
+            <form method="GET" class="searhForm">
+  <input type="text" name="searchQuery" class="search" placeholder="Search...">
+  <button type="submit" name="search">Search</button>
+</form>
+
+
+
+
+
+            <button class="create" onclick="showForm()">New</button>
+        </div>
 <div class="insertion">
         <div class="container">
 
-        <div class="Tableheader">
-            <h1>Measurement</h1>
-            <input type="text" class="search" placeholder="Search..">
-            <button class="create" onclick="showForm()">New</button>
-        </div>
 
             <div class="form"  id="insert-form">
                 <div class="formHeader">    
@@ -63,15 +77,22 @@ $result = $conn->query("SELECT * FROM measurements");
                 <img src="../icons/cross.png"  class="close" onclick="hideForm()">
              
                 </div>
-            <form method="POST">
+ 
+
+            <form method="POST" >
+    <div class="secondForm">
   <label for="MeasurementName">Measurement Name:</label>
+  <div class="inputs">
   <input type="text"
    name="MeasurementName" required>
   <button type="submit" name="insert" class="insert">Insert</button>
+  </div>
+  </div>
 </form>
 
             </div>
 
+            <div class="tableContainer">
 <table>
 <thead>
     <tr>
@@ -122,13 +143,14 @@ $result = $conn->query("SELECT * FROM measurements");
                      onclick='myFunction(<?php echo intval($row["MeasurementID"]); ?>)'>Save
                     </button>
 
-                    <button type='submit' name='delete'   >Delete</button>
+                    <button type='submit' name='delete'  class="deletebtn" >Delete</button>
                     </form>
                 </td>
             </tr>
         <?php endwhile; ?>
         </tbody>
     </table>
+    </div>
     </div>
 
 
