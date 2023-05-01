@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "bundatan_db";
+$dbname = "dbbundatan";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -81,14 +81,16 @@ $result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%
 
             <form method="POST" >
     <div class="secondForm">
-  <label for="MeasurementName">Measurement Name:</label>
   <div class="inputs">
+  <label for="MeasurementName">Measurement Name:</label>
+
   <input type="text"
    name="MeasurementName" required>
   <button type="submit" name="insert" class="insert">Insert</button>
   </div>
   </div>
 </form>
+
 
             </div>
 
@@ -104,9 +106,12 @@ $result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%
   <tbody>
         <?php while ($row = $result->fetch_assoc()) : ?>
             <tr>
-            <td><?php echo $row["MeasurementID"]; ?></td>
+            <td>
+            <span>Measurement Id: </span>    
+            <?php echo $row["MeasurementID"]; ?></td>
                 <td>
                     <form method='POST'>
+                    <span>Measurement Name: </span>
                         <input type='text' 
                         name='MeasurementID' 
                         class='id'

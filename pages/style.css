@@ -196,7 +196,6 @@ button {
 .box {
   width: 30%;
   height: 15rem;
-  background: #f6f6f6;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   margin-right: 20px;
@@ -260,7 +259,7 @@ button {
 }
 
 .chart {
-  margin-top: 2rem;
+  margin-top: 1rem;
   max-height: 700px;
   max-width: 700px;
 }
@@ -287,7 +286,9 @@ button {
   margin-left: 3rem;
   width: 100%;
 }
-
+.topSales h3 {
+  font-weight: 600;
+}
 .topSalesItem {
   display: flex;
   flex-direction: row;
@@ -448,7 +449,6 @@ button {
 .form {
   width: 100%;
   padding: 2rem;
-  margin-top: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.991);
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
@@ -463,10 +463,10 @@ button {
 
 .form button:hover {
   background: #000000;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
 }
 
 .secondForm {
+  width: 100%;
   display: flex;
   margin-top: 0.5rem;
   flex-direction: column;
@@ -479,8 +479,7 @@ button {
 }
 
 .form input {
-  width: 100%;
-  max-width: 20rem;
+  width: 30%;
   height: 2rem;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -495,7 +494,55 @@ button {
 .inputs {
   display: flex;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0.4rem;
+}
+#imageContainer input {
+  box-shadow: none;
+  border: none;
+}
+.ingredients {
+  display: flex;
+  flex-direction: column;
+}
+.ingredients label {
+  width: 10rem;
+}
+input[type="checkbox"] {
+  max-width: 16px;
+  min-width: 16px;
+  height: 16px;
+  border: 2px solid black;
+  outline: none;
+}
+input[type="checkbox"]:checked {
+  background-color: black;
+}
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.053) 0px 0px 0px 1px;
+  padding: 10px;
+}
+.ingredient-grid label {
+  display: flex;
+  font-weight: 400;
+  font-size: 1rem;
+  width: 1rem;
+  width: 100%;
+}
+.ingredient-grid .quan {
+  font-weight: 400;
+  font-size: 1rem;
+  min-width: 7rem;
+  width: 100%;
+  padding-right: 0;
+}
+
+.cont {
+  display: flex;
 }
 .insert {
   width: 100%;
@@ -517,6 +564,10 @@ button {
   font-weight: 700;
   color: #000000;
 }
+
+.form select {
+  width: 30%;
+}
 .tableContainer {
   padding: 2rem;
   border: 1px solid rgba(0, 0, 0, 0.051);
@@ -533,11 +584,14 @@ table {
 table input {
   width: 100%;
   background: white;
-  padding: 0.5rem 1rem;
   border: none;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-transform: capitalize;
+}
+table span {
+  font-weight: bold;
+  display: none;
 }
 th,
 td {
@@ -550,13 +604,15 @@ th {
   background-color: rgb(34, 33, 33);
   color: white;
   font-weight: 500;
+  font-size: 0.9rem;
   border: none;
+  padding: 0.4rem;
 }
 
 th:nth-child(1) {
   border-radius: 20px 0 0 20px;
 }
-th:nth-child(3) {
+th:last-child {
   border-radius: 0 20px 20px 0;
 }
 
@@ -574,6 +630,9 @@ td:last-child {
   text-align: center;
 }
 
+.tableName {
+  display: none;
+}
 .deletebtn {
   background-color: #b01e1e;
 }
@@ -615,6 +674,30 @@ button:hover {
   display: none;
 }
 
+select {
+  height: 2.2rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid rgba(181, 177, 177, 0.176);
+  margin-right: 1rem;
+  font-family: "Open Sans", sans-serif;
+  color: #000000;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+
+.tableContainer select {
+  border: none;
+  box-shadow: none;
+}
+
+.label {
+  margin-top: 1rem;
+}
+
+.tableContainer img {
+  max-width: 200px;
+}
 @media only screen and (max-width: 1495px) {
   #salesChart {
     min-height: 300px;
@@ -696,6 +779,139 @@ button:hover {
     height: 100%;
   }
 }
+@media only screen and (max-width: 1000px) {
+  .form select,
+  .form input {
+    width: 100%;
+  }
+  .secondForm {
+    flex-direction: column;
+  }
+  .secondForm label {
+    width: 100%;
+  }
+  .insert {
+    margin-top: 1rem;
+  }
+  .ingredient-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media only screen and (max-width: 754px) {
+  .boxes {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    cursor: grab;
+  }
+  .box {
+    min-width: 140px;
+
+    margin-top: 1rem;
+  }
+  .box:nth-child(1) {
+    margin-left: 0;
+  }
+  .logo,
+  .navTitle {
+    display: none;
+  }
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+  }
+  .sidebar .container {
+    position: fixed;
+    padding: 0;
+    height: 150px;
+    display: flex;
+    border-top: 1px solid rgb(225, 225, 225);
+  }
+
+  .navLinks {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: center;
+    height: 0;
+  }
+  .Tableheader,
+  .insertion .container,
+  .dashboard .container {
+    margin-left: 0;
+  }
+  .box:nth-child(1) {
+    margin-left: 0;
+  }
+  body {
+    margin-bottom: 40rem;
+  }
+
+  th {
+    display: none;
+  }
+  .tableName {
+    display: block;
+    border-radius: 20px;
+  }
+  th:last-child {
+    border-radius: 20px;
+  }
+  td,
+  td:first-child {
+    display: flex;
+    width: 100%;
+    color: black;
+  }
+  table span {
+    display: block;
+    font-family: 600;
+    margin-right: 0.2rem;
+  }
+  table form {
+    display: flex;
+  }
+
+  table input {
+    width: 30%;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    text-align: start;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  table select {
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0;
+    font-size: 0.9rem;
+    margin: 0;
+    height: 1.2rem;
+    color: #000000;
+  }
+
+  td:first-child {
+    display: flex;
+  }
+  .inputs {
+    flex-direction: column;
+    margin-top: 0.3rem;
+    align-items: start;
+  }
+  .tableContainer {
+    padding: 1rem;
+  }
+  .cont {
+    display: block;
+  }
+}
+
 @media only screen and (max-width: 580px) {
   .Tableheader {
     padding: 10px 20px;
@@ -716,11 +932,6 @@ button:hover {
   .form {
     margin: 0;
     padding: 1rem;
-  }
-
-  .form form input {
-    width: 100%;
-    margin: 0.5rem 0.5rem 0.5rem 0;
   }
 
   button {
@@ -751,70 +962,6 @@ button:hover {
     width: 6rem;
   }
 }
-@media only screen and (max-width: 754px) {
-  .boxes {
-    width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
-    cursor: grab;
-  }
-  .box {
-    min-width: 140px;
-
-    margin-top: 1rem;
-  }
-  .box:nth-child(1) {
-    margin-left: 0;
-  }
-}
-@media only screen and (max-width: 700px) {
-  .logo,
-  .navTitle {
-    display: none;
-  }
-  .sidebar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    display: flex;
-  }
-  .sidebar .container {
-    position: fixed;
-    padding: 0;
-    height: 150px;
-    display: flex;
-    border-top: 1px solid rgb(225, 225, 225);
-  }
-
-  .secondForm {
-    flex-direction: column;
-  }
-
-  .navLinks {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: row;
-    align-items: center;
-    height: 0;
-  }
-  .Tableheader,
-  .insertion .container,
-  .dashboard .container {
-    margin-left: 0;
-  }
-  .box:nth-child(1) {
-    margin-left: 0;
-  }
-  body {
-    margin-bottom: 40rem;
-  }
-  .inputs {
-    width: 100%;
-  }
-}
-
 @media only screen and (max-width: 400px) {
   body {
     margin-bottom: 60rem;
@@ -822,5 +969,15 @@ button:hover {
 
   .insert {
     font-size: 0.8rem;
+  }
+  .form h2 {
+    font-size: 1rem;
+  }
+  .Tableheader h1 {
+    font-size: 0.8rem;
+  }
+  .searhForm input {
+    width: 50%;
+    min-width: 6rem;
   }
 }

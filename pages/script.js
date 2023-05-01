@@ -9,9 +9,10 @@ function enableInputFields(MeasurementID) {
     var inputs = document.querySelectorAll(".all" + MeasurementID);
     if (inputs) {
         inputs.forEach(input => {
-            input.style.border = "1px solid #000";
+            input.style.boxShadow = "rgba(99, 99, 99, 0.8) 0px 2px 8px 0px";
             input.disabled = false;
         });
+
     }
 
 

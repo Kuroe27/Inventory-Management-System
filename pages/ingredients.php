@@ -5,7 +5,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "bundatan_db";
+$dbname = "dbbundatan";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -40,6 +40,14 @@ if (isset($_POST["delete"])) {
 }
 
 $result = $conn->query("SELECT * FROM ingredients");
+
+$searchQuery = "";
+if (isset($_GET["search"])) {
+    $searchQuery = $_GET["searchQuery"];
+}
+
+$result = $conn->query("SELECT * FROM ingredients WHERE IngredientName LIKE '%$searchQuery%'");
+
 
 ?>
 <!DOCTYPE html>
@@ -84,9 +92,9 @@ $result = $conn->query("SELECT * FROM ingredients");
     <div class="secondForm">
   <div class="inputs">
   <label for="IngredientName">Ingredient Name:</label>
-  <input type="text"
-   name="MeasurementName" required>
+  <input type="text" name="IngredientName" required>
    </div>
+   
    <div class="inputs">
    <label for="Quantity"  >Quantity:</label>
   <input type="number" min="1"
@@ -106,10 +114,65 @@ while ($measurement = $measurements->fetch_assoc()) {
   <button type="submit" name="insert" class="insert">Insert</button>
   </div>
 </form>
+            </div>
+            
+
+            <div class="tableContainer">
+            <table>
+            <thead>
+    <tr>
+        <th>IngredientID</th>
+        <th>IngredientName</th>
+        <th>Quantity</th>
+        <th>Measurement</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <?php while ($row = $result->fetch_assoc()) : ?>
+        <tr>
+        <td>
+        <span>Ingredients Id: </span>
+            <?php echo $row["IngredientID"]; ?></td>
+                <form method='POST'>
+                    <input type='text' name='IngredientID' class='id' value='<?php echo $row["IngredientID"]; ?>'>
+            </td>
+            <td>
+                    <span>Ingredients Name: </span>
+                    <input  id='ingredientsInput<?php echo $row["IngredientID"]; ?>' class='all<?php echo $row["IngredientID"]; ?>' REQUIRED
+                        IngredientID='IngredientName_<?php echo $row["IngredientID"]; ?>' type='text' name='IngredientName' value='<?php echo $row["IngredientName"]; ?> ' disabled>
+            </td>
+            <td>
+                <span>Quantity:</span>
+                    <input id='quantityInput<?php echo $row["IngredientID"]; ?>' REQUIRED class='all<?php echo $row["IngredientID"]; ?>' type='number' name='Quantity' value='<?php echo $row["Quantity"]; ?>' step='any' disabled>
+            </td>
+            <td>
+                <span>Mesurement:</span>
+                    <select id='measurementInput<?php echo $row["IngredientID"]; ?>' class='all<?php echo $row["IngredientID"]; ?>' name='MeasurementID' disabled>
+                        <?php
+                            $measurements = $conn->query("SELECT * FROM measurements");
+                            while ($measurement = $measurements->fetch_assoc()) {
+                                $selected = ($measurement["MeasurementID"] == $row["MeasurementID"]) ? "selected" : "";
+                                echo "<option value='" . $measurement["MeasurementID"] . "' " . $selected . ">" . $measurement["MeasurementName"] . "</option>";
+                            }
+                        ?>
+                    </select>
+            </td>
+            <td>
+                    <button IngredientID='editbtn<?php echo $row["IngredientID"]; ?>' type='button' name='editbtn<?php echo $row["IngredientID"]; ?>' id='editbtn<?php echo $row["IngredientID"]; ?>' onclick='enableInputFields(<?php echo intval($row["IngredientID"]); ?>)'>Edit</button>
+                    <button class='cancelbtn' id="cancel<?php echo $row["IngredientID"]; ?>" onclick='cancelFunction(<?php echo intval($row["IngredientID"]); ?>)'>Cancel</button>
+                    <button class='savebtn' name='save' id="save<?php echo $row["IngredientID"]; ?>" onclick='saveFunction(<?php echo intval($row["IngredientID"]); ?>)'>Save</button>
+                    <button type='submit' name='delete' class="deletebtn" onclick='deleteFunction(<?php echo intval($row["IngredientID"]); ?>)'>Delete</button>
+                </form>
+            </td>
+        </tr>
+    <?php endwhile; ?>
+</table>
+
 
             </div>
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 
 </html>
