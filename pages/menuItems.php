@@ -15,10 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   $menuItemFile = isset($_FILES['menuItemFile']['name']) ? $_FILES['menuItemFile']['name'] : '';
   $ingredientIDs = isset($_POST['ingredientIDs']) ? $_POST['ingredientIDs'] : array();
 
-  // Upload image file to the server
-  $target_dir = "../images/";
-  $target_file = $target_dir . basename($_FILES["menuItemFile"]["name"]);
-  move_uploaded_file($_FILES["menuItemFile"]["tmp_name"], $target_file);
+  if(isset($_FILES["menuItemFile"]) && $_FILES["menuItemFile"]["error"] == 0) {
+    // Upload image file to the server
+    $target_dir = "../images/";
+    $target_file = $target_dir . basename($_FILES["menuItemFile"]["name"]);
+    move_uploaded_file($_FILES["menuItemFile"]["tmp_name"], $target_file);
+  } else {
+  }
+  
 
   $stmt = $conn->prepare("INSERT INTO menuitems (MenuItemName, MenuItemPrice, MenuItemImage) VALUES (?, ?, ?)");
   $stmt->bind_param("sss", $menuItemName, $menuItemPrice, $target_file);
@@ -34,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
     $quantity = isset($_POST['quantities'][$ingredientID]) ? htmlspecialchars($_POST['quantities'][$ingredientID]) : '';
     $stmt->execute();
   }
-
+  header("Location: menuItems.php");
   
 }
 
@@ -154,7 +158,7 @@ GROUP BY
 </div>
    
       
-<input type="submit" value="Add Menu Item">
+<button type="submit" name="insert" class="insert">Insert</button>
   </div>
 </form>
 
@@ -169,6 +173,7 @@ GROUP BY
         <th>Image</th>
         <th>Item Name</th>
         <th>Item Price</th>
+        <th>Ingredients</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -204,7 +209,9 @@ GROUP BY
                       value='<?php echo preg_replace("/[^0-9.]/", "", $row["MenuItemPrice"]); ?>' 
                       step='any' disabled>
             </td>
-          
+          <td>
+          <input type="text" name="ingredients" value="<?php echo $row['Ingredients']; ?>">
+    </td>
             <td>
                  <button MenuItemID='editbtn<?php echo $row["MenuItemID"]; ?>' 
               type='button' name='editbtn<?php echo $row["MenuItemID"]; ?>' 
@@ -226,7 +233,6 @@ GROUP BY
               </button>
 
               <button type='submit' name='delete'   >Delete</button>
-                    <button>Details</button>
                 </form>
             </td>
         </tr>

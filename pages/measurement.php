@@ -125,6 +125,7 @@ $result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%
                         MeasurementID='MeasurementName<?php echo $row["MeasurementID"]; ?>' 
                         type='text' name='MeasurementNamex' 
                         value='<?php echo $row["MeasurementName"]; ?> ' disabled>
+                        
                  </td>
                 <td>
               

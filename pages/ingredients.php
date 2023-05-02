@@ -19,13 +19,19 @@ if (isset($_POST["insert"])) {
 }
 
 
-
 // check if the form has been submitted for deleting an measurement
 if (isset($_POST["delete"])) {
     $IngredientID = $_POST["IngredientID"];
-    // delete the measurement from the database
-    $conn->query("DELETE FROM ingredients WHERE IngredientID=$IngredientID");
+    try {
+        // delete the measurement from the database
+        $conn->query("DELETE FROM ingredients WHERE IngredientID=$IngredientID");
+        header("Location: ingredients.php");
+        exit();
+    } catch (mysqli_sql_exception $e) {
+        echo "<script>alert('Error deleting the ingredient: " . $e->getMessage() . "');</script>";
+    }
 }
+
 
 // check if the form has been submitted for editing an measurement
     if (isset($_POST["save"])) {
