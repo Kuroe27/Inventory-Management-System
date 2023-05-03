@@ -24,13 +24,19 @@ if (isset($_POST["save"])) {
     $conn->query("UPDATE measurements SET MeasurementName='$MeasurementName' WHERE MeasurementID=$MeasurementID");
 }
 
+
 // check if the form has been submitted for deleting an measurement
 if (isset($_POST["delete"])) {
     $MeasurementID = $_POST["MeasurementID"];
-    // delete the measurement from the database
-    $conn->query("DELETE FROM measurements WHERE MeasurementID=$MeasurementID");
+    try {
+        // delete the measurement from the database
+        $conn->query("DELETE FROM measurements WHERE MeasurementID=$MeasurementID");
+        header("Location: measurement.php");
+        exit();
+    } catch (mysqli_sql_exception $e) {
+        echo "<script>alert('Error deleting the measurement: " . $e->getMessage() . "');</script>";
+    }
 }
-
 
 $searchQuery = "";
 if (isset($_GET["search"])) {
