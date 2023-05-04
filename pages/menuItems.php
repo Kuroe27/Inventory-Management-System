@@ -42,9 +42,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   
 }
 
+
+// check if the form has been submitted for deleting an measurement
 if (isset($_POST["delete"])) {
-  $MenuItemID = isset($_POST["MenuItemID"]) ? $_POST["MenuItemID"] : '';
-  $conn->query("DELETE FROM menuitems WHERE MenuItemID='$MenuItemID'");
+  $IngredientID = $_POST["MenuItemID"];
+  try {
+      // delete the measurement from the database
+      $conn->query("DELETE FROM menuitems WHERE MenuItemID=$IngredientID");
+      header("Location: menuitems.php");
+      exit();
+  } catch (mysqli_sql_exception $e) {
+      echo "<script>alert('Error deleting the menuitem: " . $e->getMessage() . "');</script>";
+  }
 }
 if (isset($_POST["save"])) {
   $MenuItemID = isset($_POST["MenuItemID"]) ? $_POST["MenuItemID"] : '';
@@ -59,6 +68,10 @@ if (isset($_POST["save"])) {
   // Re-enable foreign key check
   $conn->query("SET FOREIGN_KEY_CHECKS=1");
 }
+
+
+
+
 
 // Select all menu items
 $result = $conn->query("
