@@ -1,9 +1,10 @@
+<?php include 'sidebar.html'; ?>
 <?php
 // Establish database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "bundatan_db";
+$dbname = "dbbundatan";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 if (!$conn) {
@@ -49,30 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $sql = "SELECT * FROM menuitems";
 $result = mysqli_query($conn, $sql);
 ?>
-<h2>Record a New Sale</h2>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-  <label for="menuItemID">Select a menu item:</label>
-  <select name="menuItemID" id="menuItemID">
-      <?php while ($row = mysqli_fetch_assoc($result)): ?>
-          <option value="<?php echo $row["MenuItemID"]; ?>"><?php echo $row["MenuItemName"]; ?></option>
-      <?php endwhile; ?>
-  </select><br>
-  <label for="quantitySold">Quantity sold:</label>
-  <input type="number" name="quantitySold" id="quantitySold" required><br>
-  <input type="submit" value="Record Sale">
-</form>
-
-<hr>
-
-<form method="get" action="display_sales.php">
-  <label for="start_date">Start Date:</label>
-  <input type="date" id="start_date" name="start_date" required>
-  
-  <label for="end_date">End Date:</label>
-  <input type="date" id="end_date" name="end_date" required>
-  
-  <input type="submit" value="Display Sales">
-</form>
 
 <?php
 
@@ -95,6 +72,59 @@ if (mysqli_num_rows($result) > 0) {
 }
 ?>
 
-<?php
-mysqli_close($conn);
-?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+    
+<div class="Tableheader">
+            <h1>Sales</h1>
+            <form method="GET" class="searhForm">
+  <input type="text" name="searchQuery" class="search" placeholder="Search...">
+  <button type="submit" name="search">Search</button>
+</form>
+
+
+
+
+
+            <button class="create" onclick="showForm()">New</button>
+        </div>
+<div class="insertion">
+        <div class="container">
+
+
+            <div class="form"  id="insert-form">
+                <div class="formHeader">    
+                <h2 class="formTitle">Insert New Title</h2>
+                <img src="../icons/cross.png"  class="close" onclick="hideForm()">
+             
+                </div>
+ 
+
+            <form method="POST" >
+            <div class="secondForm">
+  <div class="inputs">
+  <label for="MeasurementName">Measurement Name:</label>
+
+  <input type="text"
+   name="MeasurementName" required>
+  <button type="submit" name="insert" class="insert">Insert</button>
+  </div>
+  </div>
+</form>
+
+
+</body>
+</html>
