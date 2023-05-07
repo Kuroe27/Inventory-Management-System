@@ -51,27 +51,6 @@ $sql = "SELECT * FROM menuitems";
 $result = mysqli_query($conn, $sql);
 ?>
 
-<?php
-
-// Display sales table
-$sql = "SELECT s.SaleID, m.MenuItemName, s.QuantitySold, s.SaleDate
-        FROM sales s
-        INNER JOIN menuitems m ON s.MenuItemID = m.MenuItemID
-        ORDER BY s.SaleDate ASC";
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    echo "<h2>Sales</h2>";
-    echo "<table>";
-    echo "<tr><th>Sale ID</th><th>Menu Item</th><th>Quantity Sold</th><th>Sale Date</th></tr>";
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr><td>" . $row["SaleID"] . "</td><td>" . $row["MenuItemName"] . "</td><td>" . $row["QuantitySold"] . "</td><td>" . $row["SaleDate"] . "</td></tr>";
-    }
-    echo "</table>";
-} else {
-    echo "<p>No sales to display.</p>";
-}
-?>
-
 
 
 <!DOCTYPE html>
@@ -101,13 +80,15 @@ if (mysqli_num_rows($result) > 0) {
 
             <button class="create" onclick="showForm()">New</button>
         </div>
+
+
 <div class="insertion">
         <div class="container">
 
 
             <div class="form"  id="insert-form">
                 <div class="formHeader">    
-                <h2 class="formTitle">Insert New Title</h2>
+                <h2 class="formTitle">Add new sale</h2>
                 <img src="../icons/cross.png"  class="close" onclick="hideForm()">
              
                 </div>
@@ -121,9 +102,50 @@ if (mysqli_num_rows($result) > 0) {
   <input type="text"
    name="MeasurementName" required>
   <button type="submit" name="insert" class="insert">Insert</button>
+
+  </form>
+
+  
   </div>
+  
   </div>
-</form>
+
+  </div>
+  <table>
+    <tr>
+        <th>Sale ID</th>
+        <th>Menu Item</th>
+        <th>Quantity Sold</th>
+        <th>Sale Date</th>
+    </tr>
+    <?php
+    // Get sales data from database
+    $sql = "SELECT s.SaleID, m.MenuItemName, s.QuantitySold, s.SaleDate
+            FROM sales s
+            INNER JOIN menuitems m ON s.MenuItemID = m.MenuItemID
+            ORDER BY s.SaleDate ASC";
+    $result = mysqli_query($conn, $sql);
+
+    // Display sales data in table rows
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>";
+            echo "<td>" . $row["SaleID"] . "</td>";
+            echo "<td>" . $row["MenuItemName"] . "</td>";
+            echo "<td>" . $row["QuantitySold"] . "</td>";
+            echo "<td>" . $row["SaleDate"] . "</td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='4'>No sales to display.</td></tr>";
+    }
+    ?>
+</table>
+
+  </div>
+  
+  </div>
+
 
 
 </body>
