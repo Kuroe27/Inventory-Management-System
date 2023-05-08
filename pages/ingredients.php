@@ -131,6 +131,7 @@ while ($measurement = $measurements->fetch_assoc()) {
         <th>IngredientName</th>
         <th>Quantity</th>
         <th>Measurement</th>
+        <th>Ingredients Table</th>
         <th>Actions</th>
     </tr>
     </thead>

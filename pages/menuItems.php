@@ -187,6 +187,7 @@ GROUP BY
         <th>Item Name</th>
         <th>Item Price</th>
         <th>Ingredients</th>
+        <th>Menu Table</th>
         <th>Actions</th>
     </tr>
     </thead>

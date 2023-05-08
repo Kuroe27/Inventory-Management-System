@@ -106,6 +106,7 @@ $result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%
     <tr>
       <th>ID</th>
       <th>Name</th>
+      <th>Measurement Table</th>
       <th>Actions</th>
     </tr>
   </thead>

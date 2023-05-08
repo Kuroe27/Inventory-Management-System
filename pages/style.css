@@ -615,6 +615,9 @@ th:nth-child(1) {
 th:last-child {
   border-radius: 0 20px 20px 0;
 }
+th:nth-last-child(2) {
+  display: none;
+}
 
 tr:nth-child(even) {
   background-color: #ffffff;
@@ -909,6 +912,10 @@ select {
   }
   .cont {
     display: block;
+  }
+  th:nth-last-child(2) {
+    display: block;
+    border-radius: 20px;
   }
 }
 
