@@ -701,6 +701,28 @@ select {
 .tableContainer img {
   max-width: 200px;
 }
+.reports img {
+  max-width: 100px;
+  width: 100%;
+  height: 100px;
+}
+.reports .box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.reports.boxes {
+  overflow-x: none;
+}
+.reports button {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 100px;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
 @media only screen and (max-width: 1495px) {
   #salesChart {
     min-height: 300px;

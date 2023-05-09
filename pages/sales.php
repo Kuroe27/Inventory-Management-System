@@ -92,30 +92,39 @@ $result = mysqli_query($conn, $sql);
                 <img src="../icons/cross.png"  class="close" onclick="hideForm()">
              
                 </div>
- 
-
-            <form method="POST" >
-            <div class="secondForm">
-  <div class="inputs">
-  <label for="MeasurementName">Measurement Name:</label>
-
-  <input type="text"
-   name="MeasurementName" required>
-  <button type="submit" name="insert" class="insert">Insert</button>
 
   </form>
+  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+
+  <div class="secondForm">
+  <div class="inputs">
+  <label for="menuItemID">Select a menu item:</label>
+  <select name="menuItemID" id="menuItemID">
+      <?php while ($row = mysqli_fetch_assoc($result)): ?>
+          <option value="<?php echo $row["MenuItemID"]; ?>"><?php echo $row["MenuItemName"]; ?></option>
+      <?php endwhile; ?>
+  </select><br>
 
   
   </div>
-  
+  <div class="inputs">
+  <label for="quantitySold">Quantity sold:</label>
+  <input type="number" name="quantitySold" id="quantitySold" required><br>
   </div>
 
+  <button type="submit" value="Record Sale" name="insert" class="insert">Insert</button>
   </div>
+  </div>
+  
+
+ 
+  <div class="tableContainer">
   <table>
     <tr>
         <th>Sale ID</th>
         <th>Menu Item</th>
         <th>Quantity Sold</th>
+        <th>Sales Table</th>
         <th>Sale Date</th>
     </tr>
     <?php
@@ -143,10 +152,10 @@ $result = mysqli_query($conn, $sql);
 </table>
 
   </div>
-  
+    </div>
   </div>
 
 
-
+<script src="script.js"></script>
 </body>
 </html>
