@@ -1,53 +1,35 @@
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "dbbundatan";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Retrieve data from ingredients table
-$sql = "SELECT * FROM ingredients";
-$result = $conn->query($sql);
-
-// Print the data in a table format
-if ($result->num_rows > 0) {
-    echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th></tr>";
-    while($row = $result->fetch_assoc()) {
-        echo "<tr><td>" . $row["id"]. "</td><td>" . $row["name"]. "</td><td>" . $row["quantity"]. "</td></tr>";
-    }
-    echo "</table>";
-} else {
-    echo "0 results";
-}
-
-$conn->close();
-?>
+<?php include 'sidebar.html'; ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Print Ingredients Table</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 </head>
 <body>
-	<button onclick="printTable()">Print Ingredients Table</button>
+<div class="Tableheader">
+<h1>Report</h1>
+</div>
+<div class="insertion">
+        <div class="container">
+			<div class="reports boxes">
+				<div class="box"><img src="../icons/ingredient.png" class="icons"><h3>Ingredients</h3><button>Print Report</button></div>
+				<div class="box"><img
+                        src="../icons/restaurant.png" class="icons"><h3>Menu</h3><button>Print Report</button></div>
+				<div class="box"><img
+                        src="../icons/sales.png" class="icons"><h3>Sales</h3><button>Print Report</button></div>
+			</div>
 
-	<script>
-	function printTable() {
-		$.ajax({
-			url: "print_table.php",
-			type: "GET",
-			success: function(data) {
-				$("body").append(data);
-			}
-		});
-	}
-	</script>
+
+
+              
+		</div>
+		</div>
 </body>
 </html>
