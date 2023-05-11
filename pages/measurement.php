@@ -1,6 +1,8 @@
+<?php
+ob_start(); // Start output buffering
+?>
 <?php include 'sidebar.html'; ?>
 <?php
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -106,7 +108,9 @@ $result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%
     <tr>
       <th>ID</th>
       <th>Name</th>
-      <th class="no-print">Actions</th>
+      <th>Measurement Table</th>
+      <th>Actions</th>
+      
     </tr>
   </thead>
   <tbody>
@@ -133,7 +137,7 @@ $result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%
                         value='<?php echo $row["MeasurementName"]; ?> ' disabled>
                         
                  </td>
-                 <td class="no-print">
+                <td>
               
 
                     <button MeasurementID='editbtn<?php echo $row["MeasurementID"]; ?>' 
@@ -161,45 +165,14 @@ $result = $conn->query("SELECT * FROM measurements WHERE MeasurementName LIKE '%
             </tr>
         <?php endwhile; ?>
         </tbody>
-        <button onclick="printDivName()">Print Div Name</button>
     </table>
     </div>
     </div>
 
 
 </div>
-<script>
-    function printDivName() {
-      // Get the table container element
-      var tableContainer = document.querySelector(".tableContainer");
-
-      // Clone the table container to preserve the original
-      var clonedContainer = tableContainer.cloneNode(true);
-
-      // Remove the "Actions" column by index
-      var headerRow = clonedContainer.querySelector("tr");
-      headerRow.deleteCell(3);
-
-      // Loop through the data rows and remove the corresponding cell
-      var dataRows = clonedContainer.querySelectorAll("tr:not(:first-child)");
-      for (var i = 0; i < dataRows.length; i++) {
-        dataRows[i].deleteCell(3);
-      }
-
-      // Get the HTML contents of the cloned container
-      var printContents = clonedContainer.innerHTML;
-
-      // Create a new window to display the print dialog
-      var printWindow = window.open("", "", "");
-
-
-      // Write the HTML contents to the new window and print
-      printWindow.document.write(printContents);
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-      printWindow.close();
-    }
-  </script>
+<script src="script.js"></script>
 </body>
-</html>
+</html><?php
+ob_end_flush(); // Flush and output the buffer
+?>

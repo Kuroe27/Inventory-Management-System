@@ -1,7 +1,9 @@
 
+<?php
+ob_start(); // Start output buffering
+?>
 <?php include 'sidebar.html'; ?>
 <?php
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -183,3 +185,6 @@ while ($measurement = $measurements->fetch_assoc()) {
 </body>
 
 </html>
+<?php
+ob_end_flush(); // Flush and output the buffer
+?>

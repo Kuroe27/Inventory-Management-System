@@ -1,3 +1,7 @@
+
+<?php
+ob_start(); // Start output buffering
+?>
 <?php include 'sidebar.html'; ?>
 <?php
 // Establish database connection
@@ -32,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Record the sale and update ingredient quantities
   $saleDate = date("Y-m-d H:i:s");
   $sql = "INSERT INTO sales (MenuItemID, QuantitySold, SaleDate) VALUES ('$menuItemID', '$quantitySold', '$saleDate')";
+  header("Location: sales.php");
   if (mysqli_query($conn, $sql)) {
       $sql = "UPDATE ingredients
               SET Quantity = Quantity - (SELECT Quantity * '$quantitySold' FROM menuitemingredients WHERE MenuItemID = '$menuItemID' AND IngredientID = ingredients.IngredientID)
@@ -139,10 +144,10 @@ $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>";
-            echo "<td>" . $row["SaleID"] . "</td>";
-            echo "<td>" . $row["MenuItemName"] . "</td>";
-            echo "<td>" . $row["QuantitySold"] . "</td>";
-            echo "<td>" . $row["SaleDate"] . "</td>";
+            echo "<td><span>Sale ID:</span> " . $row["SaleID"] . "</td>";
+            echo "<td><span>Menu Name:</span> " . $row["MenuItemName"] . "</td>";
+            echo "<td><span>Quantity Sold:</span> " . $row["QuantitySold"] . "</td>";
+            echo "<td><span>Sale Date:</span> " . $row["SaleDate"] . "</td>";
             echo "</tr>";
         }
     } else {
@@ -158,4 +163,6 @@ $result = mysqli_query($conn, $sql);
 
 <script src="script.js"></script>
 </body>
-</html>
+</html><?php
+ob_end_flush(); // Flush and output the buffer
+?>

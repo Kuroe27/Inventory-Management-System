@@ -42,8 +42,9 @@
 
                 <a href="report.php" class="link inactive-link"><span>Report</span><img src="../icons/report.png"
                         alt="dashboardIcon" class="icons"></a>
-                <a href="dashboard.php" class="link inactive-link"><span>Logout</span><img src="../icons/logoutIcon.png"
+                <a href="logout.php" class="link inactive-link"><span>Logout</span><img src="../icons/logoutIcon.png"
                         alt="dashboardIcon" class="icons"></a>
+
             </div>
         </div>
         <a href="/Ingredients/measurement.php">aasasasassd</a>
@@ -55,6 +56,8 @@
 
         // Get all the links
         const links = document.querySelectorAll('.link, .additional-link');
+
+        let isAdditionalLinkActive = false; // Variable to track if any additional link is active
 
         // Loop through all the links
         links.forEach(link => {
@@ -69,8 +72,8 @@
 
                 // Check if the link is an additional link
                 if (link.classList.contains('additional-link')) {
-                    // Add the "active-link" class to the manage link
-                    document.querySelector('#manage-link').classList.add('active-link');
+                    // Set the flag to true to indicate an active additional link
+                    isAdditionalLinkActive = true;
                 }
             } else {
                 // Add the "inactive-link" class and remove the "active-link" class
@@ -78,6 +81,15 @@
                 link.classList.remove('active-link');
             }
         });
+
+        // Hide the additional links if no active additional link found
+        if (!isAdditionalLinkActive) {
+            const additionalLinks = document.querySelectorAll('.additional-link');
+            additionalLinks.forEach(link => {
+                link.style.display = 'none';
+            });
+        }
+
 
 
     </script>

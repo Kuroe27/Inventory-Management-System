@@ -1,3 +1,4 @@
+
 <?php include 'sidebar.html'; ?>
 <?php
 

@@ -19,11 +19,16 @@
 <div class="insertion">
         <div class="container">
 			<div class="reports boxes">
-				<div class="box"><img src="../icons/ingredient.png" class="icons"><h3>Ingredients</h3><button>Print Report</button></div>
+				<div class="box" ><img src="../icons/ingredient.png" class="icons"><h3>Ingredients</h3>
+                        <a href="../Tables/ingredientsTable.php"><button>Print Report</button></a></div>
+
 				<div class="box"><img
-                        src="../icons/restaurant.png" class="icons"><h3>Menu</h3><button>Print Report</button></div>
+                        src="../icons/restaurant.png" class="icons"><h3>Menu</h3>
+                        <a href="../Tables/menuTable.php">
+                        <button>Print Report</button></a></div>
 				<div class="box"><img
-                        src="../icons/sales.png" class="icons"><h3>Sales</h3><button>Print Report</button></div>
+                        src="../icons/sales.png" class="icons"><h3>Sales</h3>
+                           <a href="../Tables/salesTable.php"><button>Print Report</button></a></div>
 			</div>
 
 
@@ -31,5 +36,6 @@
               
 		</div>
 		</div>
+       
 </body>
 </html>

@@ -1,7 +1,9 @@
-<?php include 'sidebar.html'; ?>
+
 <?php
-
-
+ob_start(); // Start output buffering
+?>
+<?php
+include 'sidebar.html';
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -91,7 +93,6 @@ GROUP BY
   m.MenuItemPrice, 
   m.MenuItemImage
 ");
-
 ?>
 
 <!DOCTYPE html>
@@ -262,3 +263,7 @@ GROUP BY
 <script src="script.js"></script>
 </body>
 </html>
+
+<?php
+ob_end_flush(); // Flush and output the buffer
+?>

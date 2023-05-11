@@ -723,6 +723,7 @@ select {
   padding: 0.5rem;
   border-radius: 0.5rem;
 }
+
 @media only screen and (max-width: 1495px) {
   #salesChart {
     min-height: 300px;
