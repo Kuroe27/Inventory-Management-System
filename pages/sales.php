@@ -2,6 +2,16 @@
 <?php
 ob_start(); // Start output buffering
 ?>
+<?php
+session_start();
+
+// Check if the user is not logged in
+if (!isset($_SESSION['username'])) {
+  // Redirect the user to the login page
+  header("Location: ../user/login.php");
+  exit(); // Terminate the script to prevent further execution
+}
+?>
 <?php include 'sidebar.html'; ?>
 <?php
 // Establish database connection
@@ -29,7 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   while ($row = mysqli_fetch_assoc($result)) {
       $availableQuantity = $row["Quantity"] - ($row["MenuItemQuantity"] * $quantitySold);
       if ($availableQuantity < 0) {
-          die("Error: The sale cannot be recorded because the quantity of " . $row["IngredientName"] . " will go negative.");
+        die('<span style="margin-left: 350px; color: red;">Error: The sale cannot be recorded because the quantity of ' . $row["IngredientName"] . ' will go negative.</span>');
+
       }
   }
 

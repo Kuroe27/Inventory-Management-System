@@ -1,5 +1,16 @@
+
 <?php
 ob_start(); // Start output buffering
+?>
+<?php
+session_start();
+
+// Check if the user is not logged in
+if (!isset($_SESSION['username'])) {
+  // Redirect the user to the login page
+  header("Location: ../user/login.php");
+  exit(); // Terminate the script to prevent further execution
+}
 ?>
 <?php include 'sidebar.html'; ?>
 <?php

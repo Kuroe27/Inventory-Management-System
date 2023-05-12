@@ -3,7 +3,7 @@ session_start();
 
 // Check if the user is already logged in, redirect to homepage
 if (isset($_SESSION['username'])) {
-  header("Location: ../pages/dashboard.php");
+  header("Location: ./pages/dashboard.php");
   exit();
 }
 
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // If a row is found, set the session and redirect to homepage
   if ($stmt->num_rows > 0) {
     $_SESSION['username'] = $username;
-    header("Location: ../pages/dashboard.php");
+    header("Location: ./pages/dashboard.php");
     exit();
   }
 
@@ -43,12 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
   <title>Login</title>
-  <link rel="stylesheet" href="../pages/style.css">
+  <link rel="stylesheet" href="./pages/style.css">
 </head>
 <body>
   <nav class="navigation">
 
-    <a  href="../index.php" ><h1>Bundatan</h1>   </a>
+    <a  href="./index.php" ><h1>Bundatan</h1>   </a>
     <div id="boxTitle"></div>
   </nav>
 <div class="Main">

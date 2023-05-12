@@ -1,4 +1,13 @@
+<?php
+session_start();
 
+// Check if the user is not logged in
+if (!isset($_SESSION['username'])) {
+  // Redirect the user to the login page
+  header("Location: ../user/login.php");
+  exit(); // Terminate the script to prevent further execution
+}
+?>
 <?php include 'sidebar.html'; ?>
 <?php
 
@@ -36,6 +45,50 @@ if ($result->num_rows > 0) {
         $total_sales = $row["TotalSales"];
     }
 }
+// Retrieve the total number of users
+$sql = "SELECT COUNT(*) AS total_users FROM users";
+$result = $conn->query($sql);
+
+// Get the total number of users
+$total_users = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $total_users = $row["total_users"];
+}
+
+// Retrieve the total number of ingredients
+$sql = "SELECT COUNT(*) AS total_ingredients FROM ingredients";
+$result = $conn->query($sql);
+
+// Get the total number of ingredients
+$total_ingredients = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $total_ingredients = $row["total_ingredients"];
+}
+
+// Retrieve the total number of menu items
+$sql = "SELECT COUNT(*) AS total_menu_items FROM menuitems";
+$result = $conn->query($sql);
+
+// Get the total number of menu items
+$total_menu_items = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $total_menu_items = $row["total_menu_items"];
+}
+
+// Retrieve the count of ingredients with quantity below 5
+$sql = "SELECT COUNT(*) AS require_restock FROM ingredients WHERE Quantity < 5";
+$result = $conn->query($sql);
+
+// Get the count of ingredients that require restock
+$require_restock = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $require_restock = $row["require_restock"];
+}
+
 
 // Query the database to get the top 2 sold menu items
 $sql = "SELECT 
@@ -83,27 +136,29 @@ $result = $conn->query($sql);
                 <section class="header">
                 <h1 class="title">Discover</h1>
                 <div class="boxes ">
-                    <div class="box">
-                        <div class="smBox"><img src="../icons/user.png" alt="dashboardIcon" class="box../icons"></div>
-                        <h3>Total User</h3>
-                        <p>100</p>
-                    </div>
-                    <div class="box">
-                        <div class="smBox"><img src="../icons/Ingredients.png" alt="dashboardIcon" class="box../icons"></div>
-                        <h3>Ingredients</h3>
-                        <p>100</p>
-                    </div>
-                    <div class="box">
-                        <div class="smBox"><img src="../icons/menu.png" alt="dashboardIcon" class="box../icons"></div>
-                        <h3>Menu Items</h3>
-                        <p>100</p>
-                    </div>
-                    <div class="box">
-                        <div class="white"><img src="../icons/restock.png" alt="dashboardIcon" class="box../icons">
-                        </div>
-                        <h3>Require Restock</h3>
-                        <p>100</p>
-                    </div>
+                    <<div class="box">
+    <div class="smBox"><img src="../icons/user.png" alt="dashboardIcon" class="box../icons"></div>
+    <h3>Total User</h3>
+    <p><?php echo $total_users; ?></p>
+</div>
+
+<div class="box">
+    <div class="smBox"><img src="../icons/Ingredients.png" alt="dashboardIcon" class="box../icons"></div>
+    <h3>Ingredients</h3>
+    <p><?php echo $total_ingredients; ?></p>
+</div>
+
+<div class="box">
+    <div class="smBox"><img src="../icons/menu.png" alt="dashboardIcon" class="box../icons"></div>
+    <h3>Menu Items</h3>
+    <p><?php echo $total_menu_items; ?></p>
+</div>
+<div class="box">
+    <div class="white"><img src="../icons/restock.png" alt="dashboardIcon" class="box../icons"></div>
+    <h3>Require Restock</h3>
+    <p><?php echo $require_restock; ?></p>
+</div>
+
                 </div>
                 </section>
 
@@ -137,7 +192,7 @@ if ($result->num_rows > 0) {
             <div class="itemInfo">
                 <h4>Price</h4>
                 <p class="itemPrice">₱ <?php echo $row["MenuItemPrice"]; ?></p>
-                <button class="viewBtn">View<img src="../icons/redirect.png" alt="dashboardIcon"></button>
+                   <button class="viewBtn" onclick="redirectMenu()">View<img src="../icons/redirect.png" alt="dashboardIcon"></button>
             </div>
         </div>
 <?php
@@ -211,6 +266,10 @@ var boxes = document.querySelector('.boxes');
     isDragging = false;
     boxes.style.cursor = 'grab';
   });
+  function redirectMenu() {
+
+window.location.href = "menuItems.php";
+}
     </script>
  
 </body>
