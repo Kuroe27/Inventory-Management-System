@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2023 at 02:22 PM
+-- Generation Time: May 13, 2023 at 02:41 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_bundatan`
 --
+CREATE DATABASE IF NOT EXISTS `db_bundatan` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `db_bundatan`;
 
 -- --------------------------------------------------------
 
@@ -39,15 +41,15 @@ CREATE TABLE `ingredients` (
 --
 
 INSERT INTO `ingredients` (`IngredientID`, `IngredientName`, `Quantity`, `MeasurementID`) VALUES
-(1, 'Miki', '122.00', 11),
-(2, 'Soy Sauce', '10.30', 13),
-(3, 'Oyster sauce', '12.80', 13),
-(4, 'Pepper', '22.40', 11),
-(5, 'Egg', '120.00', 18),
-(6, 'Ground Pork', '22.20', 11),
-(7, 'Flour', '52.80', 11),
-(8, 'Magic sarap', '4.00', 17),
-(9, 'Cassava', '7.90', 11);
+(1, 'Miki', '121.60', 11),
+(2, 'Soy Sauce', '9.70', 13),
+(3, 'Oyster sauce', '12.40', 13),
+(4, 'Pepper', '21.60', 11),
+(5, 'Egg', '118.00', 18),
+(6, 'Ground Pork', '21.80', 11),
+(7, 'Flour', '51.60', 11),
+(8, 'Magic sarap', '2.00', 17),
+(9, 'Cassava', '6.90', 11);
 
 -- --------------------------------------------------------
 
@@ -163,7 +165,9 @@ CREATE TABLE `sales` (
 
 INSERT INTO `sales` (`SaleID`, `MenuItemID`, `SaleDate`, `QuantitySold`) VALUES
 (1, 1, '2023-05-13 14:16:09', 1),
-(2, 3, '2023-05-13 14:17:07', 2);
+(2, 3, '2023-05-13 14:17:07', 2),
+(3, 1, '2023-05-13 14:38:53', 1),
+(4, 1, '2023-05-13 14:38:57', 1);
 
 -- --------------------------------------------------------
 
@@ -262,7 +266,7 @@ ALTER TABLE `menuitems`
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`

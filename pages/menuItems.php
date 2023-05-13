@@ -140,162 +140,118 @@ if (isset($_POST["save"])) {
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="Tableheader">
+    <div class="Tableheader">
         <h1>Menu</h1>
         <form method="GET" class="searhForm">
             <input type="text" name="searchQuery" class="search" placeholder="Search...">
             <button type="submit" name="search">Search</button>
         </form>
-
         <button class="create" onclick="showForm()">New</button>
     </div>
-
     <div class="insertion">
         <div class="container">
-
-        <div class="form"  id="insert-form">
+            <div class="form" id="insert-form">
                 <div class="formHeader">    
-                <h2 class="formTitle">Insert New Ingredient</h2>
-                <img src="../icons/cross.png"  class="close" onclick="hideForm()">
+                    <h2 class="formTitle">Insert New Ingredient</h2>
+                    <img src="../icons/cross.png" class="close" onclick="hideForm()">
                 </div>
-
-                
                 <form method="post" enctype="multipart/form-data">
-
-
-
-    <div class="secondForm">
-
-  <div class="inputs">
-  <label for="menuItemName">MenuItem Name:</label>
-  <input type="text" name="menuItemName" required>
-      </div>
-
-      <div class="inputs">
-  <label for="menuItemPrice">Price:</label>
-  <input type="number" name="menuItemPrice" step="0.01" min="0" required>
-      </div>
-
-    
-   
-
-      <div class="inputs" id="imageContainer">
-  <label for="menuItemFile">Image:</label>
-  <input type="file" name="menuItemFile" accept=".jpg,.jpeg,.png" required>
-      </div>
-      
-      <label class>Ingredients:</label>
-      
-      <div class="ingredient-grid">
-
-  <?php
-    $ingredients = $conn->query("SELECT * FROM ingredients");
-    while ($ingredient = $ingredients->fetch_assoc()) {
-      echo "<div class='cont'>";
-      echo "<label >";
-      echo "<input type='checkbox' name='ingredientIDs[]' value='" . $ingredient['IngredientID'] . "'>";
-      echo $ingredient['IngredientName'];
-      echo "</label >";
-      echo "<input type='number' name='quantities[" . $ingredient['IngredientID'] . "]'  min='0.1' step='0.1' class='quan'>";
-      echo "</div>";
-    }
-?>
-</div>
-   
-      
-<button type="submit" name="insert" class="insert">Insert</button>
-  </div>
-</form>
-
-
-        </div>
-
-        <div class="tableContainer">
-        <table>
-            <thead>
-    <tr>
-        <th>MenuId</th>
-        <th>Image</th>
-        <th>Item Name</th>
-        <th>Item Price</th>
-        <th>Ingredients</th>
-        <th>Menu Table</th>
-        <th>Actions</th>
-    </tr>
+                    <div class="secondForm">
+                        <div class="inputs">
+                            <label for="menuItemName">MenuItem Name:</label>
+                            <input type="text" name="menuItemName" required>
+                        </div>
+                        <div class="inputs">
+                            <label for="menuItemPrice">Price:</label>
+                            <input type="number" name="menuItemPrice" step="0.01" min="0" required>
+                        </div>
+                        <div class="inputs" id="imageContainer">
+                            <label for="menuItemFile">Image:</label>
+                            <input type="file" name="menuItemFile" accept=".jpg,.jpeg,.png" required>
+                        </div>
+                        <label>Ingredients:</label>
+                        <div class="ingredient-grid">
+                            <?php
+                            $ingredients = $conn->query("SELECT * FROM ingredients");
+                            while ($ingredient = $ingredients->fetch_assoc()) {
+                                echo "<div class='cont'>";
+                                echo "<label>";
+                                echo "<input type='checkbox' name='ingredientIDs[]' value='" . $ingredient['IngredientID'] . "'>";
+                                echo $ingredient['IngredientName'];
+                                echo "</label>";
+                                echo "<input type='number' name='quantities[" . $ingredient['IngredientID'] . "]'  min='0.1' step='0.1' class='quan'>";
+                                echo "</div>";
+                            }
+                            ?>
+                        </div>
+                        <button type="submit" name="insert" class="insert">Insert</button>
+                    </div>
+                </form>
+            </div>
+            <div class="tableContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>MenuId</th>
+                            <th>Image</th>
+                            <th>Item Name</th>
+                            <th>Item Price</th>
+                            <th>Ingredients</th>
+                            <th>Menu Table</th>
+                            <th>Actions</th>
+                        </tr>
     </thead>
     <?php while ($row = $results->fetch_assoc()) : ?>
-        <tr>
-        <td>
-        <span>Menu Id: </span>
-            <?php echo $row["MenuItemID"]; ?></td>
-                <form method='POST'>
-                 <input type='text' 
-                      name='MenuItemID' 
-                      class='id'
-                      value='<?php echo $row["MenuItemID"]; ?>'>
-            </td>
-            </td>
-               <td><img src="<?php echo $row["MenuItemImage"]; ?>" width="100" height="100"></td>
-            <td>
-                    <span>Ingredients Name: </span>
-                    <input  id='name<?php echo $row["MenuItemID"]; ?>' 
-                      REQUIRED
-                      class='all<?php echo $row["MenuItemID"]; ?>' 
-                      MenuItemID='MenuItemName<?php echo $row["MenuItemID"]; ?>' 
-                      type='text' name='MenuItemName' 
-                      value='<?php echo $row["MenuItemName"]; ?> ' >
-            </td>
-            <td>
-                <span>Item Price:</span>
-                <input id='name<?php echo $row["MenuItemID"]; ?>' 
-                      REQUIRED
-                      IngredientID='IngredientName_<?php echo $row["MenuItemID"]; ?>' 
-                      type='number' name='MenuItemPrice' 
-                      class='all<?php echo $row["MenuItemID"]; ?>'
-                      value='<?php echo preg_replace("/[^0-9.]/", "", $row["MenuItemPrice"]); ?>' 
-                      step='any' disabled>
-            </td>
-          <td>
-    <p> <?php echo $row['Ingredients']; ?></p>  
-    </td>
-            <td>
-                 <button MenuItemID='editbtn<?php echo $row["MenuItemID"]; ?>' 
-              type='button' name='editbtn<?php echo $row["MenuItemID"]; ?>' 
-              id='editbtn<?php echo $row["MenuItemID"]; ?>' 
-              onclick='enableInputFields(<?php echo intval($row["MenuItemID"]); ?>)'>Edit</button>
-
-
-              <button
-              class='cancelbtn'
-               id="cancel<?php echo $row["MenuItemID"]; ?>"
-               onclick='myFunction(<?php echo intval($row["MenuItemID"]); ?>)'>Cancel
-              </button>
-              
-              <button
-              class='savebtn'
-              name='save'
-               id="save<?php echo $row["MenuItemID"]; ?>"
-               onclick='myFunction(<?php echo intval($row["MenuItemID"]); ?>)'>Save
-              </button>
-
-              <button type='submit' name='delete'   >Delete</button>
-                </form>
-            </td>
-        </tr>
-    <?php endwhile; ?>
-</table>
+                        <tr>
+                            <td>
+                                <span>Menu Id: </span>
+                                <?php echo $row["MenuItemID"]; ?>
+                            </td>
+                            <form method='POST'>
+                                <input type='text' name='MenuItemID' class='id' value='<?php echo $row["MenuItemID"]; ?>'>
+                            </td>
+                            </td>
+                            <td>
+                                <img src="<?php echo $row["MenuItemImage"]; ?>" width="100" height="100">
+                            </td>
+                            <td>
+                                <span>Ingredients Name: </span>
+                                <input id='name<?php echo $row["MenuItemID"]; ?>' REQUIRED
+                                    class='all<?php echo $row["MenuItemID"]; ?>' MenuItemID='MenuItemName<?php echo $row["MenuItemID"]; ?>'
+                                    type='text' name='MenuItemName' value='<?php echo $row["MenuItemName"]; ?> '>
+                            </td>
+                            <td>
+                                <span>Item Price:</span>
+                                <input id='name<?php echo $row["MenuItemID"]; ?>' REQUIRED
+                                    IngredientID='IngredientName_<?php echo $row["MenuItemID"]; ?>' type='number'
+                                    name='MenuItemPrice' class='all<?php echo $row["MenuItemID"]; ?>'
+                                    value='<?php echo preg_replace("/[^0-9.]/", "", $row["MenuItemPrice"]); ?>' step='any'
+                                    disabled>
+                            </td>
+                            <td>
+                                <p><?php echo $row['Ingredients']; ?></p>
+                            </td>
+                            <td>
+                                <button MenuItemID='editbtn<?php echo $row["MenuItemID"]; ?>' type='button'
+                                    name='editbtn<?php echo $row["MenuItemID"]; ?>' id='editbtn<?php echo $row["MenuItemID"]; ?>'
+                                    onclick='enableInputFields(<?php echo intval($row["MenuItemID"]); ?>)'>Edit</button>
+                                <button class='cancelbtn' id="cancel<?php echo $row["MenuItemID"]; ?>"
+                                    onclick='myFunction(<?php echo intval($row["MenuItemID"]); ?>)'>Cancel</button>
+                                <button class='savebtn' name='save' id="save<?php echo $row["MenuItemID"]; ?>"
+                                    onclick='myFunction(<?php echo intval($row["MenuItemID"]); ?>)'>Save</button>
+                                <button type='submit' name='delete'>Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </table>
             </div>
-            
-
-        
         </div>
-        
-      </div>
-<script src="script.js"></script>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
 

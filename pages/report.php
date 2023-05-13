@@ -3,9 +3,9 @@ session_start();
 
 // Check if the user is not logged in
 if (!isset($_SESSION['username'])) {
-  // Redirect the user to the login page
-  header("Location: ../index.php");
-  exit(); // Terminate the script to prevent further execution
+    // Redirect the user to the login page
+    header("Location: ../index.php");
+    exit(); // Terminate the script to prevent further execution
 }
 ?>
 <?php include 'sidebar.html'; ?>
@@ -23,29 +23,29 @@ if (!isset($_SESSION['username'])) {
         rel="stylesheet">
 </head>
 <body>
-<div class="Tableheader">
-<h1>Report</h1>
-</div>
-<div class="insertion">
+    <div class="Tableheader">
+        <h1>Report</h1>
+    </div>
+    <div class="insertion">
         <div class="container">
-			<div class="reports boxes">
-				<div class="box" ><img src="../icons/ingredient.png" class="icons"><h3>Ingredients</h3>
-                        <a href="../Tables/ingredientsTable.php"><button>Print Report</button></a></div>
-
-				<div class="box"><img
-                        src="../icons/restaurant.png" class="icons"><h3>Menu</h3>
-                        <a href="../Tables/menuTable.php">
-                        <button>Print Report</button></a></div>
-				<div class="box"><img
-                        src="../icons/sales.png" class="icons"><h3>Sales</h3>
-                           <a href="../Tables/salesTable.php"><button>Print Report</button></a></div>
-			</div>
-
-
-
-              
-		</div>
-		</div>
-       
+            <div class="reports boxes">
+                <div class="box">
+                    <img src="../icons/ingredient.png" class="icons">
+                    <h3>Ingredients</h3>
+                    <a href="../Tables/ingredientsTable.php"><button>Print Report</button></a>
+                </div>
+                <div class="box">
+                    <img src="../icons/restaurant.png" class="icons">
+                    <h3>Menu</h3>
+                    <a href="../Tables/menuTable.php"><button>Print Report</button></a>
+                </div>
+                <div class="box">
+                    <img src="../icons/sales.png" class="icons">
+                    <h3>Sales</h3>
+                    <a href="../Tables/salesTable.php"><button>Print Report</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
