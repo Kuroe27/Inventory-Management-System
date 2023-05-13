@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   // Connect to the MySQL database
-  $conn = new mysqli('localhost', 'admin', 'admin', 'dbbundatan');
+  $conn = new mysqli('localhost', 'admin', 'admin', 'db_bundatan');
 
   // Check connection
   if ($conn->connect_error) {
@@ -44,8 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Signup</title>
   <link rel="stylesheet" href="../pages/style.css">
+  <style>
+  body {
+  overflow: hidden;
+}
 </head>
 <body>
   <style>
@@ -86,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   <button type="submit" value="Signup">Signup</button>
 </form>
-<h4>Already have an account? <a href="login.php">Login</a></h4>
+<h4>Already have an account? <a href="../index.php">Login</a></h4>
 </div>  </div>
 
 <?php if ($signupSuccess): ?>

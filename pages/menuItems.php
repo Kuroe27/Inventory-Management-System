@@ -1,4 +1,3 @@
-
 <?php
 ob_start(); // Start output buffering
 ?>
@@ -8,7 +7,7 @@ session_start();
 // Check if the user is not logged in
 if (!isset($_SESSION['username'])) {
   // Redirect the user to the login page
-  header("Location: ../user/login.php");
+  header("Location: ../index.php");
   exit(); // Terminate the script to prevent further execution
 }
 ?>
@@ -17,10 +16,12 @@ include 'sidebar.html';
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "dbbundatan";
+$dbname = "db_bundatan";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check if the form has been submitted for creating a new menu item
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
   $menuItemName = isset($_POST['menuItemName']) ? htmlspecialchars($_POST['menuItemName']) : '';
   $menuItemPrice = isset($_POST['menuItemPrice']) ? htmlspecialchars($_POST['menuItemPrice']) : '';
@@ -32,14 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
     $target_dir = "../images/";
     $target_file = $target_dir . basename($_FILES["menuItemFile"]["name"]);
     move_uploaded_file($_FILES["menuItemFile"]["tmp_name"], $target_file);
-  } else {
   }
-  
 
   $stmt = $conn->prepare("INSERT INTO menuitems (MenuItemName, MenuItemPrice, MenuItemImage) VALUES (?, ?, ?)");
   $stmt->bind_param("sss", $menuItemName, $menuItemPrice, $target_file);
   $stmt->execute();
-  
+
   $menuItemID = $stmt->insert_id;
 
   // Prepare statement for inserting menu item ingredients
@@ -51,59 +50,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST["delete"])) {
     $stmt->execute();
   }
   header("Location: menuItems.php");
-  
 }
 
-
-// check if the form has been submitted for deleting an measurement
+// Check if the form has been submitted for deleting a menu item
 if (isset($_POST["delete"])) {
-  $IngredientID = $_POST["MenuItemID"];
+  $menuItemID = $_POST["MenuItemID"];
   try {
-      // delete the measurement from the database
-      $conn->query("DELETE FROM menuitems WHERE MenuItemID=$IngredientID");
-      header("Location: menuitems.php");
-      exit();
+    // Delete the menu item from the database
+    $conn->query("DELETE FROM menuitems WHERE MenuItemID=$menuItemID");
+    header("Location: menuItems.php");
+    exit();
   } catch (mysqli_sql_exception $e) {
-      echo "<script>alert('Error deleting the menuitem: " . $e->getMessage() . "');</script>";
+    echo "<script>alert('Error deleting the menu item: " . $e->getMessage() . "');</script>";
   }
 }
+
+// Check if the form has been submitted for updating a menu item
 if (isset($_POST["save"])) {
-  $MenuItemID = isset($_POST["MenuItemID"]) ? $_POST["MenuItemID"] : '';
-  $MenuItemName = isset($_POST["MenuItemName"]) ? $_POST["MenuItemName"] : '';
-  $MenuItemPrice = isset($_POST["MenuItemPrice"]) ? $_POST["MenuItemPrice"] : '';
-  // Disable foreign key check
-  $conn->query("SET FOREIGN_KEY_CHECKS=0");
+  $menuItemID = isset($_POST["MenuItemID"]) ? $_POST["MenuItemID"] : '';
+  $menuItemName = isset($_POST["MenuItemName"]) ? $_POST["MenuItemName"] : '';
+  $menuItemPrice = isset($_POST["MenuItemPrice"]) ? $_POST["MenuItemPrice"] : '';
 
   // Update the menu item name and price in the database
-  $conn->query("UPDATE menuitems SET MenuItemName='$MenuItemName', MenuItemPrice='$MenuItemPrice' WHERE MenuItemID=$MenuItemID");
-
-  // Re-enable foreign key check
-  $conn->query("SET FOREIGN_KEY_CHECKS=1");
-}
-
-
-
-
-
-// Select all menu items
-$result = $conn->query("
-SELECT 
-  m.MenuItemID, 
-  m.MenuItemName, 
-  m.MenuItemPrice, 
+  $stmt = $conn->prepare("UPDATE menuitems SET MenuItemName=?, MenuItemPrice=? WHERE MenuItemID=?");
+  $stmt->bind_param("ssi", $menuItemName, $menuItemPrice, $menuItemID);
+  $stmt->execute();
+  }
+  
+  // Perform the search if the search query is provided
+  $searchQuery = "";
+  if (isset($_GET["search"])) {
+  $searchQuery = $_GET["searchQuery"];
+  $searchQuery = "%$searchQuery%"; // Add wildcard characters for partial matching
+  
+  // Select menu items based on the search query
+  $stmt = $conn->prepare("
+  SELECT
+  m.MenuItemID,
+  m.MenuItemName,
+  m.MenuItemPrice,
   m.MenuItemImage,
-  GROUP_CONCAT(CONCAT(mi.Quantity, ' ', i.IngredientName) SEPARATOR ', ') AS Ingredients 
-FROM 
-  menuitems m 
-  JOIN menuitemingredients mi ON m.MenuItemID = mi.MenuItemID 
-  JOIN ingredients i ON mi.IngredientID = i.IngredientID 
-GROUP BY 
-  m.MenuItemID, 
-  m.MenuItemName, 
-  m.MenuItemPrice, 
+  GROUP_CONCAT(CONCAT(mi.Quantity, ' ', i.IngredientName) SEPARATOR ', ') AS Ingredients
+  FROM
+  menuitems m
+  JOIN menuitemingredients mi ON m.MenuItemID = mi.MenuItemID
+  JOIN ingredients i ON mi.IngredientID = i.IngredientID
+  WHERE
+  m.MenuItemName LIKE ?
+  GROUP BY
+  m.MenuItemID,
+  m.MenuItemName,
+  m.MenuItemPrice,
   m.MenuItemImage
-");
-?>
+  ");
+  
+  $stmt->bind_param("s", $searchQuery);
+  $stmt->execute();
+  $results = $stmt->get_result();
+  } else {
+  // Select all menu items if no search query is provided
+  $results = $conn->query("
+  SELECT
+  m.MenuItemID,
+  m.MenuItemName,
+  m.MenuItemPrice,
+  m.MenuItemImage,
+  GROUP_CONCAT(CONCAT(mi.Quantity, ' ', i.IngredientName) SEPARATOR ', ') AS Ingredients
+  FROM
+  menuitems m
+  JOIN menuitemingredients mi ON m.MenuItemID = mi.MenuItemID
+  JOIN ingredients i ON mi.IngredientID = i.IngredientID
+  GROUP BY
+  m.MenuItemID,
+  m.MenuItemName,
+  m.MenuItemPrice,
+  m.MenuItemImage
+  ");
+  }
+  ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -202,7 +227,7 @@ GROUP BY
         <th>Actions</th>
     </tr>
     </thead>
-    <?php while ($row = $result->fetch_assoc()) : ?>
+    <?php while ($row = $results->fetch_assoc()) : ?>
         <tr>
         <td>
         <span>Menu Id: </span>
@@ -235,7 +260,7 @@ GROUP BY
                       step='any' disabled>
             </td>
           <td>
-          <input type="text" name="ingredients" value="<?php echo $row['Ingredients']; ?>">
+    <p> <?php echo $row['Ingredients']; ?></p>  
     </td>
             <td>
                  <button MenuItemID='editbtn<?php echo $row["MenuItemID"]; ?>' 

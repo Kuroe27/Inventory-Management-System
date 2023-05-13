@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "dbbundatan";
+$dbname = "db_bundatan";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

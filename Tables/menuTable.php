@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "dbbundatan";
+$dbname = "db_bundatan";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -106,7 +106,7 @@ GROUP BY
                       step='any' disabled>
             </td>
           <td>
-          <input type="text" name="ingredients" value="<?php echo $row['Ingredients']; ?>">
+          <p> <?php echo $row['Ingredients']; ?></p> 
     </td>
         </tr>
     <?php endwhile; ?>

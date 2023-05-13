@@ -731,12 +731,17 @@ select {
   align-items: center;
   height: 91vh;
   width: 100%;
+  font-family: "Open Sans", sans-serif;
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .Main h1 {
   font-size: 5rem;
-  font-weight: 700;
+  font-weight: bold;
   color: #000000;
+  font-family: "Open Sans", sans-serif;
 }
 
 .Main form {
@@ -775,7 +780,10 @@ select {
   margin-top: 1rem;
   cursor: pointer;
 }
-
+.Main button:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
 .Main h4 {
   margin-top: 1rem;
   margin-right: 25.3rem;
@@ -787,6 +795,10 @@ select {
   color: #ff0000;
   font-weight: bold;
 }
+#p1 {
+  margin-right: 19rem;
+}
+
 .Main a,
 .Main label {
   color: #000000;
@@ -794,6 +806,11 @@ select {
   font-weight: 700;
 }
 
+.Main a:hover {
+  color: #000000;
+  text-decoration: underline;
+  font-weight: 700;
+}
 .navigation {
   height: 64px;
   width: 100%;
@@ -801,6 +818,9 @@ select {
   align-items: center;
   padding-left: 2rem;
   align-items: end;
+  border-bottom: 2px solid #00000028;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 
 .navigation h1,
@@ -842,17 +862,6 @@ select {
   text-decoration: none;
   cursor: pointer;
 }
-.titles {
-  display: flex;
-}
-
-.navigations {
-  display: flex;
-  justify-content: space-between;
-}
-.navigations #boxTitle {
-  align-self: end;
-}
 
 .navigations {
   border-bottom: 2px solid black;
@@ -869,7 +878,7 @@ select {
     width: 100px;
   }
 
-  .navTitle,
+  .navTitle .title,
   .boxTitle,
   .navLinks span {
     display: none;
@@ -1073,6 +1082,19 @@ select {
   th:nth-last-child(2) {
     display: block;
     border-radius: 20px;
+  }
+  .Main h1 {
+    font-size: 2.4rem;
+  }
+  .Main h4,
+  .Main p,
+  #p1 {
+    margin: 0;
+  }
+  .Main .container {
+    padding: 2rem;
+    overflow-x: disabled;
+    overflow-y: disabled;
   }
 }
 

@@ -8,7 +8,7 @@ session_start();
 // Check if the user is not logged in
 if (!isset($_SESSION['username'])) {
   // Redirect the user to the login page
-  header("Location: ../user/login.php");
+  header("Location: ../index.php");
   exit(); // Terminate the script to prevent further execution
 }
 ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION['username'])) {
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "dbbundatan";
+$dbname = "db_bundatan";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 

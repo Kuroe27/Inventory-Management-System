@@ -8,7 +8,7 @@ session_start();
 // Check if the user is not logged in
 if (!isset($_SESSION['username'])) {
   // Redirect the user to the login page
-  header("Location: ../user/login.php");
+  header("Location: ../index.php");
   exit(); // Terminate the script to prevent further execution
 }
 ?>
@@ -18,7 +18,7 @@ if (!isset($_SESSION['username'])) {
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "dbbundatan";
+$dbname = "db_bundatan";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 if (!$conn) {
@@ -60,14 +60,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
       echo "Error recording sale: " . mysqli_error($conn);
   }
-}
+}  
 
 // Display form for inserting new sales
 $sql = "SELECT * FROM menuitems";
 $result = mysqli_query($conn, $sql);
+
+$searchQuery = "";
+if (isset($_GET["search"])) {
+    $searchQuery = $_GET["search"];
+}
+$results = $conn->query("SELECT sales.*, menuitems.MenuItemName FROM sales INNER JOIN menuitems ON sales.MenuItemID = menuitems.MenuItemID WHERE menuitems.MenuItemName LIKE '%".$searchQuery."%'");
+
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,27 +80,21 @@ $result = mysqli_query($conn, $sql);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sales</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
-    
-<div class="Tableheader">
-            <h1>Sales</h1>
-            <form method="GET" class="searhForm">
-  <input type="text" name="searchQuery" class="search" placeholder="Search...">
-  <button type="submit" name="search">Search</button>
-</form>
-
-
-
-
-
-            <button class="create" onclick="showForm()">New</button>
-        </div>
+<body>
+    <div class="Tableheader">
+        <h1>Sales</h1>
+        <form method="GET" class="searhForm">
+            <input type="text" name="search" class="search" placeholder="Search...">
+            
+        </form>
+        <button class="create" onclick="showForm()">New</button>
+    </div>
 
 
 <div class="insertion">
@@ -120,12 +119,12 @@ $result = mysqli_query($conn, $sql);
           <option value="<?php echo $row["MenuItemID"]; ?>"><?php echo $row["MenuItemName"]; ?></option>
       <?php endwhile; ?>
   </select><br>
-
   
   </div>
   <div class="inputs">
   <label for="quantitySold">Quantity sold:</label>
   <input type="number" name="quantitySold" id="quantitySold" required><br>
+
   </div>
 
   <button type="submit" value="Record Sale" name="insert" class="insert">Insert</button>
@@ -136,44 +135,40 @@ $result = mysqli_query($conn, $sql);
  
   <div class="tableContainer">
   <table>
-    <tr>
-        <th>Sale ID</th>
-        <th>Menu Item</th>
-        <th>Quantity Sold</th>
-        <th>Sales Table</th>
-        <th>Sale Date</th>
-    </tr>
-    <?php
-    // Get sales data from database
-    $sql = "SELECT s.SaleID, m.MenuItemName, s.QuantitySold, s.SaleDate
-            FROM sales s
-            INNER JOIN menuitems m ON s.MenuItemID = m.MenuItemID
-            ORDER BY s.SaleDate ASC";
-    $result = mysqli_query($conn, $sql);
-
-    // Display sales data in table rows
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo "<tr>";
-            echo "<td><span>Sale ID:</span> " . $row["SaleID"] . "</td>";
-            echo "<td><span>Menu Name:</span> " . $row["MenuItemName"] . "</td>";
-            echo "<td><span>Quantity Sold:</span> " . $row["QuantitySold"] . "</td>";
-            echo "<td><span>Sale Date:</span> " . $row["SaleDate"] . "</td>";
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='4'>No sales to display.</td></tr>";
+                    <tr>
+                    </tr>
+                    <tr>
+                        <th>Sale ID</th>
+                        <th>Menu Item</th>
+                        <th>Quantity Sold</th>
+                        <th>Sales Table</th>
+                        <th>Sale Date</th>
+                    </tr>
+                    <?php
+                    // Display sales data in table rows
+              // Display sales data in table rows
+if ($results->num_rows > 0) {
+    while ($row = $results->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td><span>Sale ID:</span> " . $row["SaleID"] . "</td>";
+        echo "<td><span>Menu Name:</span> " . $row["MenuItemName"] . "</td>";
+        echo "<td><span>Quantity Sold:</span> " . $row["QuantitySold"] . "</td>";
+        echo "<td><span>Sale Date:</span> " . $row["SaleDate"] . "</td>";
+        echo "</tr>";
     }
-    ?>
-</table>
+} else {
+    echo "<tr><td colspan='4'>No sales found for the search query.</td></tr>";
+}
 
-  </div>
+                    ?>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
-</html><?php
+</html>
+<?php
 ob_end_flush(); // Flush and output the buffer
 ?>
