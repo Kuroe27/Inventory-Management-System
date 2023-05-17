@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   // Connect to the MySQL database
-  $conn = new mysqli('localhost', 'admin', 'admin', 'db_bundatan');
+  $conn = new mysqli('localhost', 'root', '', 'db_bundatan');
 
   // Check connection
   if ($conn->connect_error) {
